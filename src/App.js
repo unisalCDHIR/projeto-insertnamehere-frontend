@@ -14,7 +14,7 @@ function App() {
         </p>
         <form>
           <label htmlFor="email">EMAIL *</label>
-          <input 
+          <input
             id="email"
             type="email"
             placeholder="Seu melhor email"
