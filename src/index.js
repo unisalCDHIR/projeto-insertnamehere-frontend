@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
+import Signin from './signin/signin'
+import Signup from './signup/signup'
 
-ReactDOM.render(<App />, document.getElementById('root'));
-
+ReactDOM.render(<Signin/>, document.getElementById('root'));
