@@ -17,9 +17,8 @@ function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{' '}
+        CDHI
+      {' '}
       {new Date().getFullYear()}
       {'.'}
     </Typography>
@@ -46,6 +45,8 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+
+
 export default function SignIn() {
   const classes = useStyles();
   return (
@@ -60,11 +61,15 @@ export default function SignIn() {
         </Typography>
         <form className={classes.form} noValidate>
           <TextField
+            type= "email"
             variant="outlined"
             margin="normal"
             required
             fullWidth
             id="email"
+            // error
+            // helperText="Incorrect entry." 
+            // onKeyUp="teste(event)"
             label="Email Address"
             name="email"
             autoComplete="email"
@@ -96,13 +101,14 @@ export default function SignIn() {
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link href="#" variant="body2">
+              <Link href="/forgot" variant="body2">
                 Forgot password?
               </Link>
             </Grid>
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link href="/signup" variant="body2">
                 {"Don't have an account? Sign Up"}
+                
               </Link>
             </Grid>
           </Grid>
