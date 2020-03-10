@@ -1,5 +1,4 @@
 import React from 'react';
-import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -8,10 +7,10 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import Logo from '../assets/img/Logo.png';
 
 function Copyright() {
   return (
@@ -53,15 +52,10 @@ export default function SignIn() {
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Sign in
-        </Typography>
+        <img alt="Logo" src={Logo} style={{ width: 150, height: 150, display: 'block', margin: 'auto', position: 'relative' }} />
         <form className={classes.form} noValidate>
           <TextField
-            type= "email"
+            type="email"
             variant="outlined"
             margin="normal"
             required
@@ -70,7 +64,7 @@ export default function SignIn() {
             // error
             // helperText="Incorrect entry." 
             // onKeyUp="teste(event)"
-            label="Email Address"
+            label="Email"
             name="email"
             autoComplete="email"
             autoFocus
@@ -81,14 +75,14 @@ export default function SignIn() {
             required
             fullWidth
             name="password"
-            label="Password"
+            label="Senha"
             type="password"
             id="password"
             autoComplete="current-password"
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
+            label="Lembrar senha"
           />
           <Button
             type="submit"
@@ -97,18 +91,18 @@ export default function SignIn() {
             color="primary"
             className={classes.submit}
           >
-            Sign In
+            Login
           </Button>
           <Grid container>
             <Grid item xs>
               <Link href="/forgot" variant="body2">
-                Forgot password?
+                Esqueceu sua senha?
               </Link>
             </Grid>
             <Grid item>
-              <Link href="/signup" variant="body2">
-                {"Don't have an account? Sign Up"}
-                
+              <Link href="/register" variant="body2">
+                {"Não tem uma conta? Registre-se"}
+
               </Link>
             </Grid>
           </Grid>

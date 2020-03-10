@@ -5,6 +5,7 @@ import { GiHouse } from 'react-icons/gi';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
+import '../style.css' 
 
 function Copyright() {
     return (
@@ -21,8 +22,8 @@ function Copyright() {
 const NotFound = () => (
     <Container>
     <div>
-        <img alt="NotFound" src={PageNotFound} style={{ width: 400, height: 400, display: 'block', margin: 'auto',paddingTop:'81px', position: 'relative' }} />
-        <center><Link to="/signin"><GiHouse /> Voltar para home</Link></center>
+        <img alt="NotFound" src={PageNotFound} style={{width: 400, height: 400, display: 'block', margin: 'auto',paddingTop:'81px', position: 'relative' }} />
+        <center><Link to="/login" id="notfound"><GiHouse /> Voltar para home</Link></center>
         <Box mt={8}>
             <Copyright />
         </Box>
