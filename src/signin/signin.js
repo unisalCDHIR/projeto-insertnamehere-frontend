@@ -11,6 +11,10 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Logo from '../assets/img/Logo.png';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
 
 function Copyright() {
   return (
@@ -48,6 +52,18 @@ const useStyles = makeStyles(theme => ({
 
 export default function SignIn() {
   const classes = useStyles();
+
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -94,16 +110,41 @@ export default function SignIn() {
             Login
           </Button>
           <Grid container>
-            <Grid item xs>
-              <Link href="/forgot" variant="body2">
-                Esqueceu sua senha?
-              </Link>
-            </Grid>
-            <Grid item>
-              <Link href="/register" variant="body2">
-                {"Não tem uma conta? Registre-se"}
 
-              </Link>
+            <div>
+              <Grid item xs={30} sm={12}>
+                <Button size="small" color="primary" Small onClick={handleClickOpen}>
+                  Esqueci minha senha
+      </Button></Grid>
+              <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+                <DialogContent>
+                  <DialogContentText>
+                    Informe seu Email para redefinir a senha
+          </DialogContentText>
+                  <TextField
+                    autoFocus
+                    margin="dense"
+                    id="name"
+                    label="Email"
+                    type="email"
+                    fullWidth
+                  />
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleClose} color="primary">
+                    Fechar
+          </Button>
+                  <Button onClick={handleClose} color="primary">
+                    Enviar
+          </Button>
+                </DialogActions>
+              </Dialog>
+            </div>
+
+            <Grid item xs={30} sm={20}>
+              <Button size="small" color="primary" className={classes.margin} Small><Link href="/register" variant="body2">
+                {"Registre-se"}
+              </Link></Button>
             </Grid>
           </Grid>
         </form>

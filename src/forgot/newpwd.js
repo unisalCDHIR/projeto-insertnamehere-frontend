@@ -2,20 +2,18 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Logo from '../assets/img/Logo.png';
-
+import Grid from '@material-ui/core/Grid';
 
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
-      CDHI
+        CDHI
       {' '}
       {new Date().getFullYear()}
       {'.'}
@@ -36,48 +34,25 @@ const useStyles = makeStyles(theme => ({
   },
   form: {
     width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(3),
+    marginTop: theme.spacing(1),
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
 }));
 
-export default function SignUp() {
-  const classes = useStyles();
 
+
+export default function Newpwd() {
+  const classes = useStyles();
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
         <img alt="Logo" src={Logo} style={{ width: 150, height: 150, display: 'block', margin: 'auto', position: 'relative' }} />
         <form className={classes.form} noValidate>
-          <Grid container spacing={2}>
+        <Grid container spacing={2}>
             <Grid item xs={12}>
-              <TextField
-                autoComplete="name"
-                name="name"
-                variant="outlined"
-                required
-                fullWidth
-                id="name"
-                label="Nome completo"
-                autoFocus
-              />
-            </Grid>
-
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="email"
-                label="Email"
-                name="email"
-                autoComplete="email"
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
               <TextField
                 variant="outlined"
                 required
@@ -90,8 +65,8 @@ export default function SignUp() {
               />
             </Grid>
 
-            <Grid item xs={12} sm={6}>
-              <TextField
+            <Grid item xs={12}>
+              <TextField 
                 variant="outlined"
                 required
                 fullWidth
@@ -102,7 +77,6 @@ export default function SignUp() {
                 autoComplete="cPassword"
               />
             </Grid>
-
           </Grid>
           <Button
             type="submit"
@@ -111,20 +85,11 @@ export default function SignUp() {
             color="primary"
             className={classes.submit}
           >
-            Registrar
+            Redefinir
           </Button>
-          <Grid container justify="flex-end">
-            <Grid item>
-              <Button size="small" color="primary" className={classes.margin} Small>
-                <Link href="/login" variant="body2">
-                  Ja tem uma conta? Faça o Login
-              </Link>
-              </Button>
-            </Grid>
-          </Grid>
         </form>
       </div>
-      <Box mt={5}>
+      <Box mt={8}>
         <Copyright />
       </Box>
     </Container>
