@@ -9,6 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Logo from '../assets/img/Logo.png';
+import './signup.css';
 
 
 function Copyright() {
@@ -113,9 +114,9 @@ export default function SignUp() {
           >
             Registrar
           </Button>
-          <Grid container justify="flex-end">
-            <Grid item>
-              <Button size="small" color="primary" className={classes.margin} Small>
+          <Grid container>
+            <Grid item id="login">
+              <Button size="small" color="primary" className={classes.margin}>
                 <Link href="/login" variant="body2">
                   Ja tem uma conta? Faça o Login
               </Link>

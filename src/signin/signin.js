@@ -15,12 +15,13 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
+import './signin.css';
 
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
-        CDHI
+      CDHI
       {' '}
       {new Date().getFullYear()}
       {'.'}
@@ -62,7 +63,6 @@ export default function SignIn() {
   const handleClose = () => {
     setOpen(false);
   };
-
 
   return (
     <Container component="main" maxWidth="xs">
@@ -109,40 +109,14 @@ export default function SignIn() {
           >
             Login
           </Button>
-          <Grid container>
+          <Grid xs={12} container>
+            <Grid item xs={6} id="forgot">
+              <Button size="small" color="primary" onClick={handleClickOpen}>
+                Esqueci minha senha</Button>
+            </Grid>
 
-            <div>
-              <Grid item xs={30} sm={12}>
-                <Button size="small" color="primary" Small onClick={handleClickOpen}>
-                  Esqueci minha senha
-      </Button></Grid>
-              <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-                <DialogContent>
-                  <DialogContentText>
-                    Informe seu Email para redefinir a senha
-          </DialogContentText>
-                  <TextField
-                    autoFocus
-                    margin="dense"
-                    id="name"
-                    label="Email"
-                    type="email"
-                    fullWidth
-                  />
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={handleClose} color="primary">
-                    Fechar
-          </Button>
-                  <Button onClick={handleClose} color="primary">
-                    Enviar
-          </Button>
-                </DialogActions>
-              </Dialog>
-            </div>
-
-            <Grid item xs={30} sm={20}>
-              <Button size="small" color="primary" className={classes.margin} Small><Link href="/register" variant="body2">
+            <Grid item xs={6} id="register">
+              <Button size="small" color="primary" className={classes.margin}><Link href="/register" variant="body2">
                 {"Registre-se"}
               </Link></Button>
             </Grid>
@@ -152,6 +126,30 @@ export default function SignIn() {
       <Box mt={8}>
         <Copyright />
       </Box>
+
+      <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+        <DialogContent>
+          <DialogContentText>
+            Informe seu Email para redefinir a senha
+          </DialogContentText>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            label="Email"
+            type="email"
+            fullWidth
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            Fechar
+          </Button>
+          <Button onClick={handleClose} color="primary">
+            Enviar
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 }
