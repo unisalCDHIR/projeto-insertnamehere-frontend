@@ -59,7 +59,6 @@ export default function SignIn() {
   const [email, setEmail] = React.useState('');
   const [pwd, setPwd] = React.useState('');
   const [newpwdEmail, setnewpwdEmail] = React.useState('');
-  const [errormsg, setErrormsg] = React.useState('');
 
   async function handleSubmit(event){
     event.preventDefault();
@@ -67,9 +66,14 @@ export default function SignIn() {
     await api.post('/login',{
       email: email,
       password: pwd
-    }).then(res => console.log(res)).catch(err => setErrormsg(err));
-    
-    console.log(errormsg);
+    }).then(res => {
+      console.log(res.headers);
+    }).catch(err => {
+      document.getElementById("error").textContent = "* " + err.response.data.message + " *";
+      document.getElementById("error").style.visibility = "visible";
+      console.log(err.response.data);
+    });
+
   }
 
   const handleClickOpen = () => {
@@ -126,8 +130,8 @@ export default function SignIn() {
            <Grid
             id="error"
             color="red"
-            >
-            * Email ou senha estão incorretos *
+            >  
+            
           </Grid>
             
           <FormControlLabel
