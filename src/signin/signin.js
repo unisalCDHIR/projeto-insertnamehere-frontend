@@ -16,6 +16,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import './signin.css';
+import api from '../services/api'
 
 function Copyright() {
   return (
@@ -55,6 +56,21 @@ export default function SignIn() {
   const classes = useStyles();
 
   const [open, setOpen] = React.useState(false);
+  const [email, setEmail] = React.useState('');
+  const [pwd, setPwd] = React.useState('');
+  const [newpwdEmail, setnewpwdEmail] = React.useState('');
+  const [errormsg, setErrormsg] = React.useState('');
+
+  async function handleSubmit(event){
+    event.preventDefault();
+
+    await api.post('/login',{
+      email: email,
+      password: pwd
+    }).then(res => console.log(res)).catch(err => setErrormsg(err));
+    
+    console.log(errormsg);
+  }
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -62,6 +78,13 @@ export default function SignIn() {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  function handleCloseAndSend() {
+    setOpen(false);
+    api.post('/auth/forgot', {
+      email: newpwdEmail
+    });
   };
 
   return (
@@ -84,6 +107,8 @@ export default function SignIn() {
             name="email"
             autoComplete="email"
             autoFocus
+            value={email}
+            onChange={event => setEmail(event.target.value)}
           />
           <TextField
             variant="outlined"
@@ -95,7 +120,16 @@ export default function SignIn() {
             type="password"
             id="password"
             autoComplete="current-password"
+            value={pwd}
+            onChange={event => setPwd(event.target.value)}
           />
+           <Grid
+            id="error"
+            color="red"
+            >
+            * Email ou senha estão incorretos *
+          </Grid>
+            
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
             label="Lembrar senha"
@@ -106,6 +140,7 @@ export default function SignIn() {
             variant="contained"
             color="primary"
             className={classes.submit}
+            onClick={handleSubmit}
           >
             Login
           </Button>
@@ -139,13 +174,15 @@ export default function SignIn() {
             label="Email"
             type="email"
             fullWidth
+            value={newpwdEmail}
+            onChange={event => setnewpwdEmail(event.target.value)}
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
             Fechar
           </Button>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={handleCloseAndSend} color="primary">
             Enviar
           </Button>
         </DialogActions>

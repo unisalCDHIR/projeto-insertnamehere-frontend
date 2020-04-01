@@ -10,6 +10,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Logo from '../assets/img/Logo.png';
 import './signup.css';
+import api from '../services/api'
 
 
 function Copyright() {
@@ -47,6 +48,24 @@ const useStyles = makeStyles(theme => ({
 export default function SignUp() {
   const classes = useStyles();
 
+  const [name, setName] = React.useState('');
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [cpassword, setcPassword] = React.useState('');
+
+  async function handleSubmit(event){
+
+    event.preventDefault();
+
+    const response = await api.post('/users',{
+        email: email,
+        name: name,
+        password: password
+      })
+
+    
+  }
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -62,8 +81,10 @@ export default function SignUp() {
                 required
                 fullWidth
                 id="name"
+                value={name}
                 label="Nome completo"
                 autoFocus
+                onChange={event => setName(event.target.value)}
               />
             </Grid>
 
@@ -75,7 +96,9 @@ export default function SignUp() {
                 id="email"
                 label="Email"
                 name="email"
+                value={email}
                 autoComplete="email"
+                onChange={event => setEmail(event.target.value)}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -87,7 +110,9 @@ export default function SignUp() {
                 label="Senha"
                 type="password"
                 id="password"
+                value={password}
                 autoComplete="password"
+                onChange={event => setPassword(event.target.value)}
               />
             </Grid>
 
@@ -100,7 +125,9 @@ export default function SignUp() {
                 label="Confirme sua senha"
                 type="password"
                 id="cPassword"
+                value={cpassword}
                 autoComplete="cPassword"
+                onChange={event => setcPassword(event.target.value)}
               />
             </Grid>
 
@@ -111,6 +138,7 @@ export default function SignUp() {
             variant="contained"
             color="primary"
             className={classes.submit}
+            onClick={handleSubmit}
           >
             Registrar
           </Button>
