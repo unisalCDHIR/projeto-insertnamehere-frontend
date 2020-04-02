@@ -10,7 +10,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Logo from '../assets/img/Logo.png';
 import './signup.css';
-import api from '../services/api'
+import api from '../services/api';
+import { Redirect } from 'react-router-dom';
 
 
 function Copyright() {
@@ -57,11 +58,21 @@ export default function SignUp() {
 
     event.preventDefault();
 
-    const response = await api.post('/users',{
+    await api.post('/users',{
         email: email,
         name: name,
         password: password
+      }).then(res => {
+        console.log(res.status);
+        if(res.status.toString() === "201"){
+          console.log("teste");
+          return <Redirect to='/login' />
+        }
+        
       })
+      .catch(err => {
+        console.log(err);
+      });
 
     
   }

@@ -67,8 +67,9 @@ export default function SignIn() {
       email: email,
       password: pwd
     }).then(res => {
-      console.log(res.headers);
-    }).catch(err => {
+      console.log(res.headers['authorization']);
+    })
+    .catch(err => {
       document.getElementById("error").textContent = "* " + err.response.data.message + " *";
       document.getElementById("error").style.visibility = "visible";
       console.log(err.response.data);
@@ -104,9 +105,6 @@ export default function SignIn() {
             required
             fullWidth
             id="email"
-            // error
-            // helperText="Incorrect entry." 
-            // onKeyUp="teste(event)"
             label="Email"
             name="email"
             autoComplete="email"
