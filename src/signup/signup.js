@@ -66,7 +66,8 @@ export default function SignUp() {
         console.log(res.status);
         if(res.status.toString() === "201"){
           console.log("teste");
-          return <Redirect to='/login' />
+          // return <Redirect to='/login' />
+          window.location = '/login'
         }
         
       })
