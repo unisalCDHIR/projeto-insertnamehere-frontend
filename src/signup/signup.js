@@ -11,7 +11,8 @@ import Container from '@material-ui/core/Container';
 import Logo from '../assets/img/Logo.png';
 import './signup.css';
 import api from '../services/api';
-import { Redirect } from 'react-router-dom';
+import Snackbar from '@material-ui/core/Snackbar'
+import { Alert } from '@material-ui/lab';
 
 
 function Copyright() {
@@ -48,7 +49,10 @@ const useStyles = makeStyles(theme => ({
 
 export default function SignUp() {
   const classes = useStyles();
-
+  const [open, setOpen] = React.useState(false);
+  const [openError, setOpenError] = React.useState(false);
+  const [openEmailError, setOpenEmailError] = React.useState(false);
+  const [error, setError] = React.useState('');
   const [name, setName] = React.useState('');
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
@@ -58,23 +62,41 @@ export default function SignUp() {
 
     event.preventDefault();
 
-    await api.post('/users',{
+    if(password.toString() === cpassword.toString()){
+
+      await api.post('/users',{
         email: email,
         name: name,
         password: password
       }).then(res => {
         console.log(res.status);
         if(res.status.toString() === "201"){
-          console.log("teste");
-          return <Redirect to='/login' />
+          setOpen(true);
+          window.location = "/login" 
         }
         
       })
       .catch(err => {
-        console.log(err);
+        setOpenEmailError(true);
+        setError(err.response.data.errors[0].defaultMessage);
       });
 
-    
+    }
+    else{
+      setOpenError(true);
+    }
+  }
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleCloseError = () =>{ 
+    setOpenError(false);
+  };
+
+  const handleCloseEmailError = () =>{
+    setOpenEmailError(false);
   }
 
   return (
@@ -167,6 +189,21 @@ export default function SignUp() {
       <Box mt={5}>
         <Copyright />
       </Box>
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="success">
+            Conta criada com sucesso
+        </Alert>
+      </Snackbar>
+      <Snackbar open={openError} autoHideDuration={6000} onClose={handleCloseError}>
+        <Alert onClose={handleClose} severity="error">
+            Senhas não coincidem
+        </Alert>
+      </Snackbar>
+      <Snackbar open={openEmailError} autoHideDuration={6000} onClose={handleCloseEmailError}>
+        <Alert onClose={handleClose} severity="error">
+          {error}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 }

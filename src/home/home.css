@@ -1,0 +1,27 @@
+nav{
+    display: flex;
+    justify-content: space-around;
+    align-items: left;
+    min-height: 10vh;
+    margin: -10px;
+}
+
+.nav-links{
+    width: 50%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    list-style: none;
+}
+
+#profile{
+    width: 100px;
+    height: 100px;
+}
+
+
+#Cards{
+    width: 100px;
+    height: 100px;
+}
+

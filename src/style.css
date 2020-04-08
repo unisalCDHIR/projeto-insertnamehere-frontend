@@ -11,3 +11,10 @@
 #notfound:hover {
     text-decoration: underline;
 }
+
+.loading{
+    width: 100vh;
+    height: 100vh;
+    position: fixed;
+    visibility: hidden;
+}
