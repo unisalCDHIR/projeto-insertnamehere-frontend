@@ -12,7 +12,7 @@ import Logo from '../assets/img/Logo.png';
 import './signup.css';
 import api from '../services/api';
 import { Redirect } from 'react-router-dom';
-
+import CircularIndeterminate from '../components/loading.js'
 
 function Copyright() {
   return (
@@ -53,29 +53,40 @@ export default function SignUp() {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [cpassword, setcPassword] = React.useState('');
+  const [loading, setLoading] = React.useState(false);
 
-  async function handleSubmit(event){
+  async function handleSubmit(event) {
+
+    setLoadingTrue();
 
     event.preventDefault();
 
-    await api.post('/users',{
-        email: email,
-        name: name,
-        password: password
-      }).then(res => {
-        console.log(res.status);
-        if(res.status.toString() === "201"){
-          console.log("teste");
-          // return <Redirect to='/login' />
-          window.location = '/login'
-        }
-        
-      })
+    await api.post('/users', {
+      email: email,
+      name: name,
+      password: password
+    }).then(res => {
+      console.log(res.status);
+      if (res.status.toString() === "201") {
+        console.log("teste");
+        // return <Redirect to='/login' />
+        window.location = '/login'
+      }
+      setLoadingFalse();
+    })
       .catch(err => {
         console.log(err);
+        setLoadingFalse();
       });
 
-    
+  }
+
+  const setLoadingTrue = () => {
+    setLoading(true);
+  }
+
+  const setLoadingFalse = () => {
+    setLoading(false);
   }
 
   return (
@@ -151,8 +162,9 @@ export default function SignUp() {
             color="primary"
             className={classes.submit}
             onClick={handleSubmit}
+            disabled={loading}
           >
-            Registrar
+            {loading ? <CircularIndeterminate /> : 'Registrar'}
           </Button>
           <Grid container>
             <Grid item id="login">
