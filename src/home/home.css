@@ -14,6 +14,18 @@ nav{
     list-style: none;
 }
 
+#Logout:hover{
+    cursor: pointer;
+}
+
+#profile:hover{
+    cursor: pointer;
+}
+
+#Cards:hover{
+    cursor: pointer;
+}
+
 #profile{
     width: 100px;
     height: 100px;
@@ -24,4 +36,10 @@ nav{
     width: 100px;
     height: 100px;
 }
+
+#Logout{
+    width: 100px;
+    height: 100px;
+}
+
 

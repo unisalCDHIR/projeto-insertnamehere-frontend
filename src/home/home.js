@@ -3,14 +3,18 @@ import DashboardOutlinedIcon from '@material-ui/icons/DashboardOutlined';
 import PermIdentityOutlinedIcon from '@material-ui/icons/PermIdentityOutlined';
 import api from '../services/api.js'
 import './home.css'
+import { getToken, logout } from '../authentication/auth'
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 
 export default function Home(){
 
+    const token = getToken();
+
     async function getBoards(){
         await api.get('/boards',{
             headers: {
-              Authorization: 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjYWlvbW9sb25pOTlAZ21haWwuY29tIiwiZXhwIjoxNTg2MzY1NzI4fQ.TmApfL3JtJG2qFU9vyyx_3LuMSlbf87giV8J9Y3WYLpIET3zKeysRXRXHnHM9P_yOD9Z6_4J5m9klMi9qJX7rA'  //the token is a variable which holds the token
+              Authorization: token  //the token is a variable which holds the token
             }
            }).then(res => {
             console.log(res.data);
@@ -18,6 +22,11 @@ export default function Home(){
           .catch(err => {
             console.log(err);
           });
+    }
+
+    function handleLogout(){
+        logout();
+        window.location = '/login'
     }
 
     getBoards();
@@ -30,6 +39,12 @@ export default function Home(){
                 </li>
                 <li>
                     <DashboardOutlinedIcon id="Cards"/>
+                </li>
+                <li>
+                    <ExitToAppIcon 
+                    id="Logout"
+                    onClick={handleLogout}
+                    />
                 </li>
             </ul>
 

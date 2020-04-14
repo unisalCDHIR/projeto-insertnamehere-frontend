@@ -18,6 +18,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import './signin.css';
 import api from '../services/api'
 import CircularIndeterminate from '../components/loading.js'
+import { login, getToken } from '../authentication/auth'
 
 function Copyright() {
   return (
@@ -71,8 +72,9 @@ export default function SignIn() {
       email: email,
       password: pwd
     }).then(res => {
-      console.log(res.headers['authorization']);
-      setLoadingFalse();
+      login(res.headers['authorization']);
+      console.log(getToken());
+      window.location = "/home";
     })
       .catch(err => {
         document.getElementById("error").textContent = "* " + err.response.data.message + " *";
