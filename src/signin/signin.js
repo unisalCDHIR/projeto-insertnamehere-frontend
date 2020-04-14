@@ -17,6 +17,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import './signin.css';
 import api from '../services/api'
+import CircularIndeterminate from '../components/loading.js'
 
 function Copyright() {
   return (
@@ -29,6 +30,8 @@ function Copyright() {
     </Typography>
   );
 }
+
+let loading = false;
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -59,27 +62,38 @@ export default function SignIn() {
   const [email, setEmail] = React.useState('');
   const [pwd, setPwd] = React.useState('');
   const [newpwdEmail, setnewpwdEmail] = React.useState('');
+  const [loading, setLoading] = React.useState(false);
 
-  async function handleSubmit(event){
+  async function handleSubmit(event) {
     event.preventDefault();
-
-    await api.post('/login',{
+    setLoadingTrue();
+    await api.post('/login', {
       email: email,
       password: pwd
     }).then(res => {
       console.log(res.headers['authorization']);
+      setLoadingFalse();
     })
-    .catch(err => {
-      document.getElementById("error").textContent = "* " + err.response.data.message + " *";
-      document.getElementById("error").style.visibility = "visible";
-      console.log(err.response.data);
-    });
+      .catch(err => {
+        document.getElementById("error").textContent = "* " + err.response.data.message + " *";
+        document.getElementById("error").style.visibility = "visible";
+        console.log(err.response.data);
+        setLoadingFalse();
+      });
 
   }
 
   const handleClickOpen = () => {
     setOpen(true);
   };
+
+  const setLoadingTrue = () => {
+    setLoading(true);
+  }
+
+  const setLoadingFalse = () => {
+    setLoading(false);
+  }
 
   const handleClose = () => {
     setOpen(false);
@@ -125,27 +139,30 @@ export default function SignIn() {
             value={pwd}
             onChange={event => setPwd(event.target.value)}
           />
-           <Grid
+          <Grid
             id="error"
             color="red"
-            >  
-            
+          >
+
           </Grid>
-            
+
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
             label="Lembrar senha"
           />
-          <Button
+          <Button 
+            id="loginButton"
             type="submit"
             fullWidth
             variant="contained"
             color="primary"
             className={classes.submit}
             onClick={handleSubmit}
+            disabled={loading}
           >
-            Login
+            {loading ? <CircularIndeterminate /> : 'Login'}
           </Button>
+
           <Grid xs={12} container>
             <Grid item xs={6} id="forgot">
               <Button size="small" color="primary" onClick={handleClickOpen}>
