@@ -88,6 +88,7 @@ export default function SignUp() {
     }
     else{
       setOpenError(true);
+      setLoadingFalse();
     }
   }
 
