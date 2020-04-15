@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
@@ -11,6 +12,10 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { getToken, logout } from '../authentication/auth'
 import api from '../services/api.js'
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -42,26 +47,6 @@ function a11yProps(index) {
   };
 }
 
-const token = getToken();
-
-    async function getBoards(){ //paulinho@gmail.com,senha=456456
-        await api.get('/boards',{
-            headers: {
-              Authorization: token  //the token is a variable which holds the token
-            }
-           }).then(res => {
-            console.log(res.data);
-          })
-          .catch(err => {
-            console.log(err);
-          });
-    }
-   
-function handleLogout(){
-    logout();
-    window.location = '/login'
-}
-
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -87,12 +72,54 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function VerticalTabs() {
+
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
+  const [open, setOpen] = React.useState(false);
+  const [boards, setBoards] = React.useState('');
+  const [boardsValue, setBoardsValue] = React.useState('');
+
+  const token = getToken();
+
+  async function getBoards(){ //paulinho@gmail.com,senha=456456
+              
+    await api.get('/boards',{
+        headers: {
+          Authorization: token  //the token is a variable which holds the token
+          }
+        }).then(res => {
+          setBoards(res.data);
+        })
+        .catch(err => {
+          setBoards(err.data);
+        });
+  }
+
+  getBoards(); 
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  function handleCloseAndLogout(){
+    logout();
+    window.location = '/login'
+  }
+
+  function handleLogout(){
+    setOpen(true);
+  }
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  async function handleBoards(){
+    await getBoards();
+    var apiR = boards.content;
+    console.log(boards.content); 
+    console.log(apiR.length);
+  }
 
   return (
     <div className={classes.root}>
@@ -107,7 +134,7 @@ export default function VerticalTabs() {
       >
         <Tab icon={<AccountCircleIcon id="profile"/>} className={classes.profile} {...a11yProps(0)} />
         
-        <Tab icon={<DashboardOutlinedIcon id="boards" />} className={classes.boards} {...a11yProps(1)} />
+        <Tab onClick={handleBoards} icon={<DashboardOutlinedIcon id="boards" />} className={classes.boards} {...a11yProps(1)} />
             
         <Tab onClick={handleLogout} icon={<ExitToAppIcon id="logout" />} className={classes.logout} {...a11yProps(2)} />
       </Tabs>
@@ -115,11 +142,25 @@ export default function VerticalTabs() {
         Profile
       </TabPanel>
       <TabPanel value={value} index={1}>
-        Boards
+        {boardsValue}
       </TabPanel>
       <TabPanel value={value} index={2}>
-        Logout
       </TabPanel>
+      <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+        <DialogContent>
+          <DialogContentText>
+            Deseja mesmo fazer logout?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            Não
+          </Button>
+          <Button onClick={handleCloseAndLogout} color="primary">
+            Sim
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }

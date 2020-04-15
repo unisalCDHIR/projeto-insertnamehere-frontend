@@ -18,7 +18,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import './signin.css';
 import api from '../services/api'
 import CircularIndeterminate from '../components/loading.js'
-import { login, getToken } from '../authentication/auth'
+import { login } from '../authentication/auth'
 
 function Copyright() {
   return (
@@ -31,8 +31,6 @@ function Copyright() {
     </Typography>
   );
 }
-
-let loading = false;
 
 const useStyles = makeStyles(theme => ({
   paper: {
