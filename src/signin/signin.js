@@ -73,7 +73,6 @@ export default function SignIn() {
       password: pwd
     }).then(res => {
       login(res.headers['authorization']);
-      console.log(getToken());
       window.location = "/home";
     })
       .catch(err => {

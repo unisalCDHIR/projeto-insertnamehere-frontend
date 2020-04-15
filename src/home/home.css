@@ -14,32 +14,17 @@ nav{
     list-style: none;
 }
 
-#Logout:hover{
-    cursor: pointer;
-}
-
-#profile:hover{
-    cursor: pointer;
-}
-
-#Cards:hover{
-    cursor: pointer;
-}
-
 #profile{
-    width: 100px;
-    height: 100px;
+    width: 50px;
+    height: 50px;
 }
 
-
-#Cards{
-    width: 100px;
-    height: 100px;
+#boards{
+    width: 50px;
+    height: 50px;
 }
 
-#Logout{
-    width: 100px;
-    height: 100px;
+#logout{
+    width: 50px;
+    height: 50px;
 }
-
-
