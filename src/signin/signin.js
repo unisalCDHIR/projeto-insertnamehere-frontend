@@ -70,7 +70,7 @@ export default function SignIn() {
       email: email,
       password: pwd
     }).then(res => {
-      login(res.headers['authorization']);
+      login(res.headers['authorization'], res.headers['id']);
       window.location = "/home";
     })
       .catch(err => {
