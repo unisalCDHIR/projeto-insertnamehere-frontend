@@ -16,6 +16,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
+import { HasBoards, GetBoards, SetBoards } from '../board_content/board_c'
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -71,18 +72,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
 export default function VerticalTabs() {
 
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
   const [open, setOpen] = React.useState(false);
   const [boards, setBoards] = React.useState('');
-  const [boardsValue, setBoardsValue] = React.useState('');
 
   const token = getToken();
 
   async function getBoards(){ //paulinho@gmail.com,senha=456456
-              
     await api.get('/boards',{
         headers: {
           Authorization: token  //the token is a variable which holds the token
@@ -96,6 +96,7 @@ export default function VerticalTabs() {
   }
 
   getBoards(); 
+  SetBoards(boards.content);
 
   const handleClose = () => {
     setOpen(false);
@@ -116,9 +117,7 @@ export default function VerticalTabs() {
 
   async function handleBoards(){
     await getBoards();
-    var apiR = boards.content;
-    console.log(boards.content); 
-    console.log(apiR.length);
+    console.log(boards.content);
   }
 
   return (
@@ -138,12 +137,15 @@ export default function VerticalTabs() {
             
         <Tab onClick={handleLogout} icon={<ExitToAppIcon id="logout" />} className={classes.logout} {...a11yProps(2)} />
       </Tabs>
+
       <TabPanel value={value} index={0}>
         Profile
       </TabPanel>
+
       <TabPanel value={value} index={1}>
-        {boardsValue}
+        {}
       </TabPanel>
+
       <TabPanel value={value} index={2}>
       </TabPanel>
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
