@@ -18,10 +18,10 @@ export default function Profile() {
     const [error, setError] = React.useState('');
     const [openError, setOpenError] = React.useState(false);
     const [open, setOpen] = React.useState(false);
-    const [gambiarra, setGambiarra] = React.useState(false);
+    const [breakEl, setBreakEl] = React.useState(false);
 
     async function getUser() {
-        setGambiarra(true);
+        setBreakEl(true);
         await api.get('/users/' + id, {
             headers: {
                 Authorization: token  //the token is a variable which holds the token
@@ -42,7 +42,7 @@ export default function Profile() {
 
     // }, 2222);
 
-    if (!gambiarra)
+    if (!breakEl)
         getUser();
 
     const handleClose = () => {

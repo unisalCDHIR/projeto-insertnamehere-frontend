@@ -18,6 +18,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import { HasBoards, GetBoards, SetBoards } from '../board_content/board_c'
 import Profile from '../account/account.js'
+import Boards from '../components/board'
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -79,29 +80,13 @@ export default function VerticalTabs() {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
   const [open, setOpen] = React.useState(false);
-  const [boards, setBoards] = React.useState('');
 
   const token = getToken();
   const id = getId();
 
-  async function getBoards(){ //paulinho@gmail.com,senha=456456
-    await api.get('/boards',{
-        headers: {
-          Authorization: token  //the token is a variable which holds the token
-          }
-        }).then(res => {
-          setBoards(res.data);
-        })
-        .catch(err => {
-          setBoards(err.data);
-        });
-  }
-
   // setInterval(() => {
   //   getBoards();
   // }, 5000);
-  
-  SetBoards(boards.content);
 
   const handleClose = () => {
     setOpen(false);
@@ -120,10 +105,6 @@ export default function VerticalTabs() {
     setValue(newValue);
   };
 
-  async function handleBoards(){
-    await getBoards();
-    console.log(boards.content);
-  }
 
   return (
     <div className={classes.root}>
@@ -138,7 +119,7 @@ export default function VerticalTabs() {
       >
         <Tab icon={<AccountCircleIcon id="profile"/>} className={classes.profile} {...a11yProps(0)} />
         
-        <Tab onClick={handleBoards} icon={<DashboardOutlinedIcon id="boards" />} className={classes.boards} {...a11yProps(1)} />
+        <Tab icon={<DashboardOutlinedIcon id="boards" />} className={classes.boards} {...a11yProps(1)} />
             
         <Tab onClick={handleLogout} icon={<ExitToAppIcon id="logout" />} className={classes.logout} {...a11yProps(2)} />
       </Tabs>
@@ -148,7 +129,7 @@ export default function VerticalTabs() {
       </TabPanel>
 
       <TabPanel value={value} index={1}>
-        {}
+        <Boards />
       </TabPanel>
 
       <TabPanel value={value} index={2}>
