@@ -1,0 +1,10 @@
+.boardDescription {
+    word-wrap: break-word;
+    height: 250px;
+    width: 40vh;
+    overflow-y: auto;
+}
+
+.list {
+    margin: 40px;
+}
