@@ -30,7 +30,6 @@ export default function Profile() {
             setUser(res.data);
         })
             .catch(err => {
-                // setGambiarra(false);
                 err.response.data ? setError(err.response.data.errors[0].defaultMessage) : setError('ERRO DESCONHECIDO');
                 setOpen(true)
                 setOpenError(true);

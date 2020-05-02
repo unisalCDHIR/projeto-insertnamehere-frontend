@@ -1,24 +1,22 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import '../home/home.css'
-import DashboardOutlinedIcon from '@material-ui/icons/DashboardOutlined';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import { getId, getToken, logout } from '../authentication/auth'
-import api from '../services/api.js'
+import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
-import { HasBoards, GetBoards, SetBoards } from '../board_content/board_c'
-import Profile from '../account/account.js'
-import Boards from '../components/board'
+import { makeStyles } from '@material-ui/core/styles';
+import Tab from '@material-ui/core/Tab';
+import Tabs from '@material-ui/core/Tabs';
+import Typography from '@material-ui/core/Typography';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import DashboardOutlinedIcon from '@material-ui/icons/DashboardOutlined';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import PropTypes from 'prop-types';
+import React from 'react';
+import Profile from '../account/account.js';
+import { getId, getToken, logout } from '../authentication/auth';
+import Boards from '../components/board';
+import '../home/home.css';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
