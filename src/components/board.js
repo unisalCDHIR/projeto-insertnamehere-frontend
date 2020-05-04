@@ -69,24 +69,26 @@ export default function Boards() {
     }
 
     function handleEditCloseAndSend(board ) {
-        // if (openEdit && a) {
-        //     setLoadingTrue();
-        //     api.put('/boards/' + board.id,
-        //         {
-        //             name: editedBoardName,
-        //             description: editedBoardDescription
-        //         },
-        //         {
-        //             headers: {
-        //                 Authorization: token  //the token is a variable which holds the token
-        //             }
-        //         }).then(res => {
-        //             setLoadingFalse();
-        //         })
-        //         .catch(err => {
-        //             setLoadingFalse()
-        //         });
-        // }
+        if (openEdit) {
+            setLoadingTrue();
+            api.put('/boards/' + board.id,
+                {
+                    name: editedBoardName,
+                    description: editedBoardDescription
+                },
+                {
+                    headers: {
+                        Authorization: token  //the token is a variable which holds the token
+                    }
+                }).then(res => {
+                    setLoadingFalse();
+                    setOpenEdit(false);
+                    getBoards();
+                })
+                .catch(err => {
+                    setLoadingFalse()
+                });
+        }
     }
 
     async function getBoards() { //paulinho@gmail.com,senha=456456
@@ -194,7 +196,7 @@ export default function Boards() {
                                         <Button onClick={setEditFalse} color="primary">
                                             Cancelar
                                         </Button>
-                                        <Button onClick={handleEditCloseAndSend(board)} color="primary">
+                                        <Button onClick={() => handleEditCloseAndSend(board)} color="primary">
                                             Salvar
                                         </Button>
                                     </DialogActions>
