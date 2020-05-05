@@ -76,7 +76,6 @@ export default function SignIn() {
       .catch(err => {
         document.getElementById("error").textContent = "* " + err.response.data.message + " *";
         document.getElementById("error").style.visibility = "visible";
-        console.log(err.response.data);
         setLoadingFalse();
       });
 

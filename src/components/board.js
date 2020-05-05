@@ -17,6 +17,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+import Grid from '@material-ui/core/Grid';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -43,6 +44,9 @@ export default function Boards() {
     const [breakEl, setBreakEl] = React.useState(false);
     const [editedBoardName, setEditedBoardName] = React.useState(null);
     const [editedBoardDescription, setEditedBoardDescription] = React.useState(null);
+    const [deleteWarning, setDeleteWarning] = React.useState(false);
+    const [isOwner, setOwner] = React.useState(false);
+    const [addDialog, setAddDialog] = React.useState(false);
     const token = getToken();
     const id = getId();
 
@@ -64,10 +68,45 @@ export default function Boards() {
         setOpenEdit(false);
     }
 
+
+    function handleDeleteMessage(board){
+        if(board.owner.id.toString() === id.toString()){
+            setOwner(true);
+            console.log(isOwner);
+        }
+        else{
+            setOwner(false);
+            console.log(isOwner);
+        }
+        console.log("passei pela cond");
+        setDeleteWarning(true);
+
+    }
     function handleEditClose() {
 
     }
 
+    function handleDelete(board){
+        setLoadingTrue();
+        api.delete("boards/" + board.id, 
+        {
+            headers:{
+                Authorization: token
+            }
+        }).then(res =>{
+            if(getBoards()){
+                setLoadingFalse();
+            }
+        }).catch(err =>{
+
+        })
+        getBoards();
+        setDeleteWarning(false);
+    }
+
+    function handleAddIcon(){
+        setAddDialog(true);
+    }
     function handleEditCloseAndSend(board ) {
         if (openEdit) {
             setLoadingTrue();
@@ -85,7 +124,7 @@ export default function Boards() {
                     setOpenEdit(false);
                     getBoards();
                 })
-                .catch(err => {
+                .catch(err => {                  
                     setLoadingFalse()
                 });
         }
@@ -126,6 +165,18 @@ export default function Boards() {
                     <div>
 
                     </div>
+                    <Button onClick={handleAddIcon}>
+                    Adicionar 
+                    <AddCircleIcon id="addIcon">
+                        
+                    </AddCircleIcon>
+                    </Button>
+                    
+                    <Dialog open={addDialog}>
+                        <DialogContentText>
+                            
+                        </DialogContentText>
+                    </Dialog>
                     <List component="nav" aria-label="main mailbox folders" className="list">
                         {boards ? boards.content.map((board) =>
                             <ListItem className="item">
@@ -156,7 +207,9 @@ export default function Boards() {
                                         variant="contained"
                                         color="secondary"
                                         aria-label="delete"
-                                        className="deleteButton">
+                                        className="deleteButton"
+                                        onClick={() => handleDeleteMessage(board)}
+                                        >
                                         <DeleteIcon />
                                     </IconButton>
 
@@ -201,6 +254,34 @@ export default function Boards() {
                                         </Button>
                                     </DialogActions>
                                 </Dialog>
+                                <Dialog open={deleteWarning && isOwner}>
+                                    <DialogContent >
+                                    <DialogContentText>
+                                            Você é o dono deste quadro, se decidir sair do mesmo, todos os dados serão apagados.
+                                            Tem certeza?
+                                            </DialogContentText>
+                                        <Button onClick={() => handleDelete(board)}>
+                                                SIM
+                                            </Button>
+                                        <Button onClick={() => setDeleteWarning(false)}>
+                                                NÃO
+                                            </Button>
+                                        </DialogContent>    
+                                </Dialog>
+                                <Dialog open={deleteWarning && !isOwner}>
+                                    <DialogContent >
+                                        <DialogContentText>
+                                            Deseja mesmo sair deste quadro?
+                                            </DialogContentText>
+                                            <Button onClick={() => handleDelete(board)}>
+                                                SIM
+                                            </Button>
+                                            <Button onClick={() => setDeleteWarning(false)}>
+                                                NÃO
+                                            </Button>
+                                        </DialogContent>
+                                    </Dialog>
+                                
                             </ListItem>
                         ) : null}
                     </List>

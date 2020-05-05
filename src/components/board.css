@@ -24,3 +24,12 @@ ListItem {
     margin: 15px;
     background-color: rgba(0, 0, 0, 0.03);
 }
+
+#error{
+    color: red;
+    visibility: hidden;
+}
+
+#addIcon{
+    margin-left: 5px;
+}
