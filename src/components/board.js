@@ -17,7 +17,8 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import Grid from '@material-ui/core/Grid';
+import Filled from '@material-ui/icons/Delete';
+import { getBoardId, setBoardId } from '../board_content/board_c.js'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -47,6 +48,8 @@ export default function Boards() {
     const [deleteWarning, setDeleteWarning] = React.useState(false);
     const [isOwner, setOwner] = React.useState(false);
     const [addDialog, setAddDialog] = React.useState(false);
+    const [newBoardName, setNewBoardName] = React.useState('');
+    const [newBoardDesc, setNewBoardDesc] = React.useState('');
     const token = getToken();
     const id = getId();
 
@@ -70,25 +73,23 @@ export default function Boards() {
 
 
     function handleDeleteMessage(board){
+        setBoardId(board.id);
         if(board.owner.id.toString() === id.toString()){
             setOwner(true);
-            console.log(isOwner);
         }
         else{
             setOwner(false);
-            console.log(isOwner);
         }
-        console.log("passei pela cond");
         setDeleteWarning(true);
-
-    }
-    function handleEditClose() {
-
     }
 
-    function handleDelete(board){
+    function addBoard(){
         setLoadingTrue();
-        api.delete("boards/" + board.id, 
+        api.post("/boards",
+        {
+            name: newBoardName,
+            description: newBoardDesc
+        }, 
         {
             headers:{
                 Authorization: token
@@ -100,6 +101,45 @@ export default function Boards() {
         }).catch(err =>{
 
         })
+        setAddDialog(false);
+        getBoards();
+        setLoadingFalse();
+    }
+
+    function closeAddDialog(){
+        setAddDialog(false);
+    }
+
+    async function handleDelete(board){
+        setLoadingTrue();
+        var id = getBoardId();
+    
+        if(!isOwner){
+            await api.put('boards/'  + id + '/leave',{},{
+                headers:{
+                    Authorization: token
+                }
+            }).then(res =>{
+                
+            }).catch(err =>{
+                	console.log(err);
+            })
+        }
+        else{
+            await api.delete("boards/" + id,{}, 
+            {
+                headers:{
+                    Authorization: token
+                }
+            }).then(res =>{
+                if(getBoards()){
+                    setLoadingFalse();
+                }
+            }).catch(err =>{
+            
+            })
+        }
+       
         getBoards();
         setDeleteWarning(false);
     }
@@ -162,9 +202,6 @@ export default function Boards() {
         <div className={classess.root}>
             {loading ? <CircularIndeterminate /> :
                 <div>
-                    <div>
-
-                    </div>
                     <Button onClick={handleAddIcon}>
                     Adicionar 
                     <AddCircleIcon id="addIcon">
@@ -173,10 +210,40 @@ export default function Boards() {
                     </Button>
                     
                     <Dialog open={addDialog}>
-                        <DialogContentText>
-                            
+                        <DialogContent>
+                        <DialogContentText id="addBoardTitle">
+                            ADICIONAR UM NOVO QUADRO
                         </DialogContentText>
+
+                        <DialogContentText>
+                            Nome: <TextField 
+                            id="txtBoardName"
+                            onChange={event => setNewBoardName(event.target.value)}
+                            ></TextField>
+                        </DialogContentText>
+                        <DialogContentText>
+                            Descrição: <TextField 
+                            id="txtDescription"
+                            onChange={event => setNewBoardDesc(event.target.value)}
+                            ></TextField>
+                        </DialogContentText>
+
+                        <div id="buttonsAddDialog">
+                        <Button onClick={() => addBoard()}> Adicionar 
+                        <AddCircleIcon id="addIcon">
+                        
+                        </AddCircleIcon></Button>
+
+                        <Button onClick={() => closeAddDialog()}> Fechar 
+                        <Filled id="closeIcon">
+                        
+                        </Filled></Button>
+
+                        </div>
+
+                        </DialogContent>  
                     </Dialog>
+                    <div>
                     <List component="nav" aria-label="main mailbox folders" className="list">
                         {boards ? boards.content.map((board) =>
                             <ListItem className="item">
@@ -215,10 +282,10 @@ export default function Boards() {
 
                                 </div>
 
-                                <Dialog open={openEdit} onClose={handleEditClose} aria-labelledby="form-dialog-title">
+                                <Dialog open={openEdit} aria-labelledby="form-dialog-title">
                                     <DialogContent>
-                                        <DialogContentText>
-                                            teste
+                                        <DialogContentText id="editBoardDialog">
+                                            EDITAR SEU QUADRO
                                         </DialogContentText>
                                         {editedBoardName === null ? setEditedBoardName(board.name) : null}
                                         {editedBoardDescription === null ? setEditedBoardDescription(board.description) : null}
@@ -285,6 +352,7 @@ export default function Boards() {
                             </ListItem>
                         ) : null}
                     </List>
+                    </div>
                 </div>
             }
 
