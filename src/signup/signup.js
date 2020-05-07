@@ -75,7 +75,6 @@ export default function SignUp() {
         console.log(res.status);
         if(res.status.toString() === "201"){
           setOpen(true);
-          window.location = "/login" 
         }
         setLoadingFalse();
       })
@@ -94,6 +93,7 @@ export default function SignUp() {
 
   const handleClose = () => {
     setOpen(false);
+    window.location = "/login" 
   };
 
   const handleCloseError = () =>{ 
@@ -177,6 +177,8 @@ export default function SignUp() {
             </Grid>
 
           </Grid>
+          <br />
+          <Alert severity="info">Você precisa confirmar seu email para criar sua conta</Alert>
           <Button
             type="submit"
             fullWidth
@@ -202,9 +204,9 @@ export default function SignUp() {
       <Box mt={5}>
         <Copyright />
       </Box>
-      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+      <Snackbar open={open} onClose={handleClose}>
         <Alert onClose={handleClose} severity="success">
-            Conta criada com sucesso
+            Conta criada com sucesso! Você precisa confirmar seu e-mail para fazer login na plataforma. Se sua conta não for confirmada em até 24 horas, ela não será aprovada mas automaticamente excluída.
         </Alert>
       </Snackbar>
       <Snackbar open={openError} autoHideDuration={6000} onClose={handleCloseError}>
