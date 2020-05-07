@@ -126,7 +126,7 @@ export default function Boards() {
             })
         }
         else{
-            await api.delete("boards/" + id,{}, 
+            await api.delete("boards/" + id, 
             {
                 headers:{
                     Authorization: token
@@ -161,7 +161,7 @@ export default function Boards() {
                     }
                 }).then(res => {
                     setLoadingFalse();
-                    setOpenEdit(false);
+                    setEditFalse();
                     getBoards();
                 })
                 .catch(err => {                  
