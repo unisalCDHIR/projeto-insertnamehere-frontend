@@ -62,6 +62,9 @@ export default function Boards() {
     }
 
     const setEditTrue = (board) => {
+
+        setBoardId(board.id);
+
         if (editedBoardName === null)
             setEditedBoardName(board.name);
 
@@ -138,7 +141,10 @@ export default function Boards() {
                 {
                     headers: {
                         Authorization: token
-                    }
+                    },
+                    data: {
+
+                    },
                 }).then(res => {
                     if (getBoards()) {
                         setLoadingFalse();
@@ -156,9 +162,11 @@ export default function Boards() {
         setAddDialog(true);
     }
     function handleEditCloseAndSend(board) {
+        
+        var id = getBoardId();
         if (openEdit) {
             setLoadingTrue();
-            api.put('/boards/' + board.id,
+            api.put('/boards/' + id,
                 {
                     name: editedBoardName,
                     description: editedBoardDescription
