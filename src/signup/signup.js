@@ -220,5 +220,6 @@ export default function SignUp() {
         </Alert>
       </Snackbar>
     </Container>
+    
   );
 }
