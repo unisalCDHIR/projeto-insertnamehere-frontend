@@ -32,7 +32,7 @@ div{
 #header{
     width: 100%;
     padding: 5px;
-    background-color: lightblue;
+    background-color: white;
 }
 
 #boardInfo{
@@ -49,23 +49,23 @@ div{
     margin-bottom: 10px;
 }
 
-#logout{
+#logoutBtn{
+    position: absolute; 
+    top: 0;
+    right: 0;
     border-width: 2px;
     border-style: solid;
     border-color: black;
-    margin-top:-10px;
-    vertical-align:middle;
-    margin-left: 38%;
-    margin-right: 10px;
-    padding-right: -80%;
-    margin-bottom: 3px;
+    margin-top: 5px;
+    margin-right: 5px;
 }
 
-#logout:hover{
+#logoutBtn:hover{
     cursor: pointer;
 }
 
-#logout:hover{
+#logoutBtn:hover{
     cursor: pointer;
     background-color: rgb(212, 240, 255);
 }
+
