@@ -9,7 +9,6 @@ import board from './board/board_v'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 
 ReactDOM.render(
-  
   <BrowserRouter>
     <Switch>
       <Route path="/register" exact={true} component={Signup} />

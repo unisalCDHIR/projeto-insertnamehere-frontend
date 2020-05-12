@@ -1,14 +1,71 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
 #homeIcon{
-    background-color: lightgrey;
     border-width: 2px;
     border-style: solid;
     border-color: black;
+    margin-bottom: -10px;
 }
 #homeIcon:hover{
     cursor: pointer;
-    background-color: gray;
+    background-color: rgb(212, 240, 255);
 }
 
 div{
     font-family: Arial, Helvetica, sans-serif;
+}
+
+#peopleIcon{
+    border-width: 2px;
+    border-style: solid;
+    border-color: black;
+    margin-bottom: -10px;
+}
+#peopleIcon:hover{
+    cursor: pointer;
+    background-color: rgb(212, 240, 255);
+}
+
+#header{
+    width: 100%;
+    padding: 5px;
+    background-color: lightblue;
+}
+
+#boardInfo{
+    
+    padding: 5px;
+    background-color: white;
+}
+
+#Logo{
+    margin-top:-5px;
+    margin-left: 40%;
+    margin-right: auto;
+    vertical-align:middle;
+    margin-bottom: 10px;
+}
+
+#logout{
+    border-width: 2px;
+    border-style: solid;
+    border-color: black;
+    margin-top:-10px;
+    vertical-align:middle;
+    margin-left: 38%;
+    margin-right: 10px;
+    padding-right: -80%;
+    margin-bottom: 3px;
+}
+
+#logout:hover{
+    cursor: pointer;
+}
+
+#logout:hover{
+    cursor: pointer;
+    background-color: rgb(212, 240, 255);
 }
