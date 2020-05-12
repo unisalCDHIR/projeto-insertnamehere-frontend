@@ -88,6 +88,7 @@ export default function VerticalTabs() {
 
   const handleClose = () => {
     setOpen(false);
+    document.getElementsByClassName("MuiTab-wrapper")[1].click();
   };
 
   function handleCloseAndLogout(){
