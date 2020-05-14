@@ -68,3 +68,7 @@ div{
     cursor: pointer;
     background-color: rgb(212, 240, 255);
 }
+
+#kanbanElement{
+    margin-top: 30px;
+}
