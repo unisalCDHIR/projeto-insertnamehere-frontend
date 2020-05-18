@@ -72,7 +72,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
 export default function VerticalTabs() {
 
   const classes = useStyles();

@@ -12,138 +12,146 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+import Boards from '../components/board';
+import BoardData from "../board/board_data"
+import DataToFeed from "../board/board_feed"
 
-export default function Board () {
+export default function Board() {
 
-    function getBoardId(){
-        var info = window.location.href.split('/');
-        return info[4];
-    }
-    
-    
-    function goToHome(){
-        setDialog(true);
-    }
+  const [breakEl, setBreakEl] = React.useState(false);
+  const [boardName, setBoardName] = React.useState('');
+  const [boardDesc, setBoardDesc] = React.useState('');
+  const [boardCards, setBoardCards] = React.useState([]);
+  const [boardUsers, setBoardUsers] = React.useState('');
+  const [boardOwner, setBoardOwner] = React.useState('');
+  const [boardOwnerEmail, setBoardOwnerEmail] = React.useState('');
+  const [dialogConfirm, setDialog] = React.useState(false);
+  const [dialogOwner, setDialogOwner] = React.useState(false);
+  const [confirmLogout, setConfirmLogout] = React.useState(false);
+  const [arrayBoards, setarrayBoards] = React.useState([]);
+  const [lockState, setlockState] = React.useState(false);
 
-    function goToPeople(){
-        setDialogOwner(true);
-    }
+  if (!breakEl) {
+    getBoardById();
+  }
+  
+  function getBoardId() {
+    var info = window.location.href.split('/');
+    return info[4];
+  }
 
-    function handleGoToHome(){
-        window.location = '/home';
-    }
+  async function getBoardById() {
+    setBreakEl(true);
+    var boardId = getBoardId();
+    var token = getToken();
+    await api.get('/boards/' + boardId, {
+      headers: {
+        Authorization: token  //the token is a variable which holds the token
+      }
+    }).then(res => {
+      setBoardName(res.data.name);
+      setBoardDesc(res.data.description);
+      res.data.cards.forEach(element => {
+        boardCards.push(element);
+      })
+      setBoardUsers(res.data.users);
+      setBoardOwner(res.data.owner.name);
+      setBoardOwnerEmail(res.data.owner.email);
+    })
+      .catch(err => {
 
-    function Logout(){
-        setConfirmLogout(true);
-        //logout();
-        //window.location = '/login'
-    }
+      });
+  }
+  
+  function goToHome() {
+    setDialog(true);
+  }
 
-    function handleLogoutAct(){
-        logout();
-        window.location = '/login'
-    }
+  function goToPeople() {
+    setDialogOwner(true);
+  }
+
+  function handleGoToHome() {
+    window.location = '/home';
+  }
+
+  function Logout() {
+    setConfirmLogout(true);
+  }
+
+  function handleLogoutAct() {
+    logout();
+    window.location = '/login'
+  }
 
 
-    
-    const [breakEl, setBreakEl] = React.useState(false);
-    const [boardName, setBoardName] = React.useState('');
-    const [boardDesc, setBoardDesc] = React.useState('');
-    const [boardCards, setBoardCards] = React.useState('');
-    const [boardUsers, setBoardUsers] = React.useState('');
-    const [boardOwner, setBoardOwner] = React.useState('');
-    const [boardOwnerEmail, setBoardOwnerEmail] = React.useState('');
-    const [boardPeople, setPeople] = React.useState(false);
-    const [dialogConfirm, setDialog] = React.useState(false);
-    const [dialogOwner, setDialogOwner] = React.useState(false);
-    const [confirmLogout, setConfirmLogout] = React.useState(false);
-    
-    async function getBoardById(){
-        setBreakEl(true);
-        var boardId = getBoardId();
-        var token = getToken();
-        await api.get('/boards/' + boardId, {
-            headers: {
-                Authorization: token  //the token is a variable which holds the token
-            }
-        }).then(res => {
-            console.log(res.data);
-            setBoardName(res.data.name);
-            setBoardDesc(res.data.description);
-            setBoardCards(res.data.cards);
-            setBoardUsers(res.data.users);
-            setBoardOwner(res.data.owner.name);
-            setBoardOwnerEmail(res.data.owner.email);
-        })
-            .catch(err => {
-               
-        });
-    }
-    
-    if (!breakEl)
-    {
-        getBoardById();
-    }
 
-    return (
-        <div id="header">
-            <div id="boardButtons">
-                <HomeIcon id="homeIcon" onClick={goToHome} style={{fontSize:40}}/> <PeopleIcon id="peopleIcon" onClick={goToPeople} style={{fontSize:40}}/><img id="Logo" src={Logo} height="62" width="62" /> 
-                <strong> - Quadros Organizacionais</strong>
-                <ExitToAppIcon style={{fontSize:40}} onClick={Logout} id="logoutBtn" />
-            </div>
-            
-            <div id="boardInfo">
-                <h3>Quadro: "{boardName}" </h3>
-                <h3>Descrição: "{boardDesc}" </h3>
-            </div>
-            <Dialog open={dialogConfirm}>
-                <DialogContent >
-                    <DialogContentText>
-                        <strong>Deseja voltar para home?</strong>
-                    </DialogContentText>
-                        <Button onClick={() => handleGoToHome()}>
-                            SIM
+  return (
+    <div id="header">
+      <div id="boardButtons">
+        <HomeIcon id="homeIcon" onClick={goToHome} style={{ fontSize: 40 }} /> <PeopleIcon id="peopleIcon" onClick={goToPeople} style={{ fontSize: 40 }} /><img id="Logo" src={Logo} height="62" width="62" />
+        <strong> - Quadros Organizacionais</strong>
+        <ExitToAppIcon style={{ fontSize: 40 }} onClick={Logout} id="logoutBtn" />
+      </div>
+
+      <div id="boardInfo">
+        <h3>Quadro: "{boardName}" </h3>
+        <h3>Descrição: "{boardDesc}" </h3>
+      </div>
+      <Dialog open={dialogConfirm}>
+        <DialogContent >
+          <DialogContentText>
+            <strong>Deseja voltar para home?</strong>
+          </DialogContentText>
+          <Button onClick={() => handleGoToHome()}>
+            SIM
                         </Button>
-                        <Button onClick={() => setDialog(false)}>
-                            NÃO
+          <Button onClick={() => setDialog(false)}>
+            NÃO
                         </Button>
-                </DialogContent>
-            </Dialog>
+        </DialogContent>
+      </Dialog>
 
-            <Dialog open={confirmLogout}>
-                <DialogContent >
-                    <DialogContentText>
-                        <strong>Deseja dar logout?</strong>
-                    </DialogContentText>
-                        <Button onClick={() => handleLogoutAct()}>
-                            SIM
+      <Dialog open={confirmLogout}>
+        <DialogContent >
+          <DialogContentText>
+            <strong>Deseja dar logout?</strong>
+          </DialogContentText>
+          <Button onClick={() => handleLogoutAct()}>
+            SIM
                         </Button>
-                        <Button onClick={() => setConfirmLogout(false)}>
-                            NÃO
+          <Button onClick={() => setConfirmLogout(false)}>
+            NÃO
                         </Button>
-                </DialogContent>
-            </Dialog>
+        </DialogContent>
+      </Dialog>
 
-            <Dialog open={dialogOwner}>
-                <DialogContent >
-                    <DialogContentText>
-                        <strong>PESSOAS</strong>
-                    </DialogContentText>
-                    <DialogContentText>
-                        <strong>Dono do quadro: </strong>{boardOwner}
-                    </DialogContentText>
+      <Dialog open={dialogOwner}>
+        <DialogContent >
+          <DialogContentText>
+            <strong>PESSOAS</strong>
+          </DialogContentText>
+          <DialogContentText>
+            <strong>Dono do quadro: </strong>{boardOwner}
+          </DialogContentText>
 
-                    <DialogContentText>
-                        <strong>Email do dono: </strong>  {boardOwnerEmail}
-                    </DialogContentText>
-                    <Button onClick={() => setDialogOwner(false)}>
-                            SAIR
-                    </Button>    
-                </DialogContent>
-            </Dialog>
-        </div>
-    )
+          <DialogContentText>
+            <strong>Email do dono: </strong>  {boardOwnerEmail}
+          </DialogContentText>
+          <Button onClick={() => setDialogOwner(false)}>
+            SAIR
+                    </Button>
+        </DialogContent>
+      </Dialog>
+
+      {boardCards.length ? 
+       <BoardData data={DataToFeed(boardCards)}/> : null}}
+      
+
+     
+    </div>
+    //
+  )
 
 }
 
