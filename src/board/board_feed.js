@@ -1,5 +1,4 @@
 import React from "react"
-import uuid from "uuid/v4"; 
 
 export default function DatatoFeed(boardCards){
       
@@ -12,21 +11,26 @@ export default function DatatoFeed(boardCards){
     
       async function feedBoard() {
             boardCards.forEach(element => {
+              console.log(element);
               if (element.column === "BACKLOG") {
-                itemsFromBackendBacklog.push({ id: uuid(), content: element.description })
+                itemsFromBackendBacklog.push({ id: element.id, content: element.description, name: element.name })
                 console.log(itemsFromBackendBacklog);
               }
               else if (element.column === "TODO") {
-                itemsFromBackendToDo.push({ id: uuid(), content: element.description })
+                itemsFromBackendToDo.push({ id: element.id, content: element.description, name: element.name })
               }
               else if (element.column === "ONGOING") {
-                itemsFromBackendOnGoing.push({ id: uuid(), content: element.description })
+                itemsFromBackendOnGoing.push({ id: element.id, content: element.description, name: element.name })
               }
               else if (element.column === "DONE") {
-                itemsFromBackendDone.push({ id: uuid(), content: element.description })
+                itemsFromBackendDone.push({ id: element.id, content: element.description, name: element.name })
               }
             });
-    
+
+            itemsFromBackendBacklog.push({id: "temp", content: "Solte seu card aqui", name: "    "});
+            itemsFromBackendToDo.push({id: "temp", content: "Solte seu card aqui", name: "    "});
+            itemsFromBackendOnGoing.push({id: "temp", content: "Solte seu card aqui", name: "    "});
+            itemsFromBackendDone.push({id: "temp", content: "Solte seu card aqui", name: "    "});
         }
     
         
@@ -35,27 +39,26 @@ export default function DatatoFeed(boardCards){
             lock = true;
         }
         
-        const columnsFromBackend = {
-          [uuid()]: {
+        const columnsFromBackend = [
+          {
             name: "BACKLOG",
             items: itemsFromBackendBacklog
           },
-          [uuid()]: {
+           {
             name: "TO DO",
             items: itemsFromBackendToDo
           },
-          [uuid()]: {
+           {
             name: "ON GOING",
             items: itemsFromBackendOnGoing
           },
-          [uuid()]: {
+           {
             name: "DONE",
             items: itemsFromBackendDone
           }
-        };
+        ];
     
-        const columns = columnsFromBackend;
-    
-        return columns;
+
+        return columnsFromBackend;
     
     }

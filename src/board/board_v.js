@@ -1,20 +1,14 @@
 import React from 'react';
 import HomeIcon from '@material-ui/icons/Home';
-import './board_v.css';
 import api from '../services/api'
 import { getId, getToken, logout } from '../authentication/auth';
-import PeopleIcon from '@material-ui/icons/People';
-import Logo from '../assets/img/Logo.png';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Boards from '../components/board';
-import BoardData from "../board/board_data"
-import DataToFeed from "../board/board_feed"
+import GlobalStyle from '../styles/global'
+import Header from '../components/header/index'
+import Board_Content from '../components/board/index'
+import Card from '../components/board/index'
+import DatatoFeed from '../board/board_feed'
+import { DndProvider } from 'react-dnd'
+import HTML5Backend from 'react-dnd-html5-backend'
 
 export default function Board() {
 
@@ -62,6 +56,10 @@ export default function Board() {
 
       });
   }
+
+  if(boardCards.length){
+    console.log(boardCards);
+  }
   
   function goToHome() {
     setDialog(true);
@@ -87,71 +85,14 @@ export default function Board() {
 
 
   return (
-    <div id="header">
-      <div id="boardButtons">
-        <HomeIcon id="homeIcon" onClick={goToHome} style={{ fontSize: 40 }} /> <PeopleIcon id="peopleIcon" onClick={goToPeople} style={{ fontSize: 40 }} /><img id="Logo" src={Logo} height="62" width="62" />
-        <strong> - Quadros Organizacionais</strong>
-        <ExitToAppIcon style={{ fontSize: 40 }} onClick={Logout} id="logoutBtn" />
-      </div>
-
-      <div id="boardInfo">
-        <h3>Quadro: "{boardName}" </h3>
-        <h3>Descrição: "{boardDesc}" </h3>
-      </div>
-      <Dialog open={dialogConfirm}>
-        <DialogContent >
-          <DialogContentText>
-            <strong>Deseja voltar para home?</strong>
-          </DialogContentText>
-          <Button onClick={() => handleGoToHome()}>
-            SIM
-                        </Button>
-          <Button onClick={() => setDialog(false)}>
-            NÃO
-                        </Button>
-        </DialogContent>
-      </Dialog>
-
-      <Dialog open={confirmLogout}>
-        <DialogContent >
-          <DialogContentText>
-            <strong>Deseja dar logout?</strong>
-          </DialogContentText>
-          <Button onClick={() => handleLogoutAct()}>
-            SIM
-                        </Button>
-          <Button onClick={() => setConfirmLogout(false)}>
-            NÃO
-                        </Button>
-        </DialogContent>
-      </Dialog>
-
-      <Dialog open={dialogOwner}>
-        <DialogContent >
-          <DialogContentText>
-            <strong>PESSOAS</strong>
-          </DialogContentText>
-          <DialogContentText>
-            <strong>Dono do quadro: </strong>{boardOwner}
-          </DialogContentText>
-
-          <DialogContentText>
-            <strong>Email do dono: </strong>  {boardOwnerEmail}
-          </DialogContentText>
-          <Button onClick={() => setDialogOwner(false)}>
-            SAIR
-                    </Button>
-        </DialogContent>
-      </Dialog>
-
-      {boardCards.length ? 
-       <BoardData data={DataToFeed(boardCards)}/> : null}}
-      
-
-     
-    </div>
-    //
-  )
+    <>
+      <DndProvider backend={HTML5Backend}>
+        {boardCards.length > 0 && <Header />}
+        {boardCards.length > 0 && <GlobalStyle />}
+        {boardCards.length > 0 && <Board_Content data_cards={DatatoFeed(boardCards)}/>}
+      </DndProvider>
+    </>
+  );
 
 }
 
