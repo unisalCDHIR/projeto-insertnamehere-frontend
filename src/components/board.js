@@ -19,18 +19,13 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Filled from '@material-ui/icons/Delete';
 import { getBoardId, setBoardId } from '../board_content/board_c.js'
-import Snackbar from '@material-ui/core/Snackbar'
-import { Alert } from '@material-ui/lab'
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        display: "flex",
-        flexWrap: "wrap",
         width: '100%',
         maxWidth: 360,
         margin: 5,
         backgroundColor: theme.palette.background.paper,
-        display: 'flex',
     },
 }));
 
@@ -52,8 +47,6 @@ export default function Boards() {
     const [addDialog, setAddDialog] = React.useState(false);
     const [newBoardName, setNewBoardName] = React.useState('');
     const [newBoardDesc, setNewBoardDesc] = React.useState('');
-    const [createdSnack, setCreatedSnack] = React.useState(false);
-    const [notCreatedSnack, setNotCreatedSnack] = React.useState(false);
     const token = getToken();
     const id = getId();
 
@@ -66,16 +59,11 @@ export default function Boards() {
     }
 
     const setEditTrue = (board) => {
-
-        setBoardId(board.id);
-
         if (editedBoardName === null)
             setEditedBoardName(board.name);
 
         if (editedBoardDescription === null)
             setEditedBoardDescription(board.description);
-
-        
 
         setOpenEdit(true);
     }
@@ -110,13 +98,10 @@ export default function Boards() {
                     Authorization: token
                 }
             }).then(res => {
-                setCreatedSnack(true)
                 if (getBoards()) {
                     setLoadingFalse();
                 }
             }).catch(err => {
-                //err.response.data.errors[0].defaultMessage
-                setNotCreatedSnack(true);
 
             })
         setAddDialog(false);
@@ -124,13 +109,10 @@ export default function Boards() {
         setLoadingFalse();
     }
 
-    function closeSnack(){
-        setCreatedSnack(false);
-        setNotCreatedSnack(false);
-    }
     function closeAddDialog() {
         setAddDialog(false);
     }
+
     async function handleDelete(board) {
         setLoadingTrue();
         var id = getBoardId();
@@ -151,10 +133,7 @@ export default function Boards() {
                 {
                     headers: {
                         Authorization: token
-                    },
-                    data: {
-
-                    },
+                    }
                 }).then(res => {
                     if (getBoards()) {
                         setLoadingFalse();
@@ -172,11 +151,9 @@ export default function Boards() {
         setAddDialog(true);
     }
     function handleEditCloseAndSend(board) {
-        
-        var id = getBoardId();
         if (openEdit) {
             setLoadingTrue();
-            api.put('/boards/' + id,
+            api.put('/boards/' + board.id,
                 {
                     name: editedBoardName,
                     description: editedBoardDescription
@@ -269,19 +246,7 @@ export default function Boards() {
 
                         </DialogContent>
                     </Dialog>
-
-                    <Snackbar open={createdSnack} onClose={() => closeSnack()}>
-                        <Alert severity="success">
-                           Seu quadro foi criado com sucesso
-                        </Alert>
-                    </Snackbar>
-
-                    <Snackbar open={notCreatedSnack} onClose={() => closeSnack()}>
-                        <Alert severity="error">
-                            Não foi possível criar seu quadro, cheque novamente os campos
-                        </Alert>
-                    </Snackbar>
-                    <div>
+                    <div className="listContainer">
                         <List component="nav" aria-label="main mailbox folders" className="list">
                             {boards ? boards.content.map((board) =>
                                 <ListItem className="item">
