@@ -1,11 +1,9 @@
 import React from 'react';
-import HomeIcon from '@material-ui/icons/Home';
 import api from '../services/api'
 import { getId, getToken, logout } from '../authentication/auth';
 import GlobalStyle from '../styles/global'
 import Header from '../components/header/index'
 import Board_Content from '../components/board/index'
-import Card from '../components/board/index'
 import DatatoFeed from '../board/board_feed'
 import { DndProvider } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
@@ -87,7 +85,7 @@ export default function Board() {
   return (
     <>
       <DndProvider backend={HTML5Backend}>
-        {boardCards.length > 0 && <Header />}
+        {boardCards.length > 0 && <Header board_name={boardName} board_description={boardDesc} board_users={boardUsers} board_owner={boardOwner} board_owner_email={boardOwnerEmail}/>}
         {boardCards.length > 0 && <GlobalStyle />}
         {boardCards.length > 0 && <Board_Content data_cards={DatatoFeed(boardCards)}/>}
       </DndProvider>

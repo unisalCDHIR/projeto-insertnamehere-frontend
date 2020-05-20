@@ -2,16 +2,14 @@ import React, { useRef, useContext } from 'react';
 
 import BoardContext from '../board/context'
 
-import { Container, Label } from './styles';
+import { Container } from './styles';
 
 import { useDrag, useDrop } from 'react-dnd'
 
 export default function Card({ cards, index, listIndex }){
 
     const ref = useRef();
-    const listitem = [];
     const { move } = useContext(BoardContext);
-    const { lists } = useContext(BoardContext);
 
     const [{isDragging}, dragRef] = useDrag({
       item: { type: 'CARD', index, listIndex, id: cards.id},
@@ -23,6 +21,7 @@ export default function Card({ cards, index, listIndex }){
     const [, dropRef] = useDrop({
       accept:'CARD',
       hover(item, monitor){
+        if(item.id !== "temp"){
         const draggedListIndex = item.listIndex;
         const targetListIndex = listIndex;
 
@@ -46,11 +45,12 @@ export default function Card({ cards, index, listIndex }){
           return;
         }
 
-        move(draggedListIndex, targetListIndex, draggedIndex, targetIndex);
+        move(draggedListIndex, targetListIndex, draggedIndex, targetIndex, cards.id);
 
         item.index = targetIndex;
         item.listIndex = targetListIndex;
 
+        }
 
       }
     });

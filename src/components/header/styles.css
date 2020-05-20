@@ -1,0 +1,30 @@
+#logoutIcon{
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+   
+}
+
+#logoutIcon:hover{
+    width: 53px;
+    height: 53px;
+}
+
+#boardTitle{
+    font-size: 20px;
+}
+
+#peopleIcon{
+    width: 50px;
+    height: 50px;
+    top: 10px;
+    right: 70px;
+    position: absolute;
+}
+
+#peopleIcon:hover{
+    width: 53px;
+    height: 53px;
+}
