@@ -43,7 +43,6 @@ export default function List( { data, index: listIndex, board_id } ){
   const [loading, setLoading] = React.useState(false);
 
   const [errorMsg, setErrormsg] = React.useState('');
-
   
 
   let token = getToken();

@@ -57,7 +57,7 @@ export default function Board() {
   return (
     <>
       <DndProvider backend={HTML5Backend}>
-        {boardCards.length > 0 && <Header  board_name={boardName} board_description={boardDesc} board_users={boardUsers} board_owner={boardOwner} board_owner_email={boardOwnerEmail}/>}
+        {boardCards.length > 0 && <Header  board_id={boardId} board_background={boardBackground} board_name={boardName} board_description={boardDesc} board_users={boardUsers} board_owner={boardOwner} board_owner_email={boardOwnerEmail}/>}
         {boardCards.length > 0 && <GlobalStyle />}
         {boardCards.length > 0 && <Board_Content board_background={boardBackground} board_id={boardId} data_cards={DatatoFeed(boardCards)}/>}
       </DndProvider>

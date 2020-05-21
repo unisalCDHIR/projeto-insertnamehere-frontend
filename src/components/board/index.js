@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useContext } from 'react';
 
 import produce from 'immer'
 
@@ -8,19 +8,25 @@ import List from '../list/index';
 
 import BoardContext from './context'
 
+import HeaderContext from '../header/context'
+
 import DatatoFeed from '../../board/board_feed';
 
 import backgrounds from "../../backgrounds/backgrounds.js"
 
-export default function Board_Content({board_background, data_cards, board_id}){
+export default function Board_Content({ board_background, data_cards, board_id}){
 
     const [openBackgrounds, setOpenBackgrounds] = React.useState(false);  //TERMINAR DIALOG BACKGROUNDS
 
     const [backgrounds_data, setBackgrounds] = React.useState(backgrounds);
 
-    let background_id = board_background;
-
     const [lists, setLists] = useState(data_cards);
+
+    function getBackgroundId(board_background){
+      return board_background[1];
+     }
+
+    const { background } = useContext(HeaderContext);
 
     function move(fromList, toList, from, to){
       setLists(produce(lists, draft => {
@@ -33,7 +39,7 @@ export default function Board_Content({board_background, data_cards, board_id}){
     
     return (
       <BoardContext.Provider value={{ lists, move }}>
-        <Container background={backgrounds_data[board_background[1]].content}>
+        <Container background={backgrounds_data[getBackgroundId(board_background)].content}>
           {lists.map((data, index) => <List board_id={board_id} key={data.name} index={index} data={data}/>)}
         </Container>
       </BoardContext.Provider>

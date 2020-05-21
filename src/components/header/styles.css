@@ -41,3 +41,23 @@
     width: 53px;
     height: 53px;
 }
+
+#imgs{
+    width: 200px;
+    border-radius: 10px;
+    border-color: lightblue;
+
+
+}
+
+#imgs:hover{
+    -ms-transform: scale(1.08); /* IE 9 */
+    transform: scale(1.08);
+    transition: 0.5s;
+    cursor: pointer;
+}
+
+.background-selected{
+    border: 10px solid blue;
+}
+
