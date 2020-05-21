@@ -20,7 +20,7 @@ import FilterHdrIcon from '@material-ui/icons/FilterHdr';
 
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 
-import backgrounds from '../../backgrounds/backgrounds'
+import backgrounds from '../../enums/backgrounds'
 
 import Grid from '@material-ui/core/Grid';
 
