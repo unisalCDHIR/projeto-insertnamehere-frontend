@@ -11,10 +11,8 @@ export default function DatatoFeed(boardCards){
     
       async function feedBoard() {
             boardCards.forEach(element => {
-              console.log(element);
               if (element.column === "BACKLOG") {
                 itemsFromBackendBacklog.push({ id: element.id, content: element.description, name: element.name })
-                console.log(itemsFromBackendBacklog);
               }
               else if (element.column === "TODO") {
                 itemsFromBackendToDo.push({ id: element.id, content: element.description, name: element.name })

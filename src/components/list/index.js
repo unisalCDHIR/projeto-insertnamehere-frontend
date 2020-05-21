@@ -1,29 +1,30 @@
 import React ,{ useRef, useContext } from 'react';
-
 import { Container } from './styles';
-
 import { MdAdd } from 'react-icons/md'
-
 import Card from "../card/index";
-
 import BoardContext from '../board/context'
-
 import { useDrag, useDrop } from 'react-dnd'
-
 import AddCircleIcon from '@material-ui/icons/AddCircle';
-
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
-
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import TextField from '@material-ui/core/TextField';
-
 import api from '../../services/api';
 import { getToken } from '../../authentication/auth';
+import { makeStyles } from '@material-ui/core/styles';
 
-export default function List( { data, index: listIndex } ){
+const useStyles = makeStyles((theme) => ({
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: '#fff',
+  },
+}));
+
+export default function List( { data, index: listIndex, board_id } ){
 
   const { lists } = useContext(BoardContext);
 
@@ -35,30 +36,51 @@ export default function List( { data, index: listIndex } ){
 
   const [newCardColumn, setNewCardColumn] = React.useState("BACKLOG");
 
+  const [responseItems, setResItems] = React.useState([]);
+
+  const [refreshState, setRefreshState] = React.useState(false);
+
+  const [loading, setLoading] = React.useState(false);
+
+  const [errorMsg, setErrormsg] = React.useState('');
+
+  
+
   let token = getToken();
 
+
   async function addCard(){
+    setLoading(true);
+    setOpenAddCard(false);
     api.post("/cards", {
-      boardId: "30",
+      boardId: board_id,
       column: newCardColumn,
       description: newCardDescription,
       name: newCardName,
-      usersIds: [
-        3
+      usersIds:[
+        
       ]
     },  {
           headers: {
           Authorization: token
       }
   }).then(res => {
-      console.log(res);
+    
+    window.location.reload();
+    setLoading(false);
+    
     }).catch(err => {
-      console.log(err);
+      setLoading(false);
+      setErrormsg(err);
     });
   }
 
     return (
-      <Container >
+      <>
+      <Backdrop open={loading} >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+      <Container refreshState={refreshState}>
         <header>
           <h2>{data.name}</h2>
           {data.name === "BACKLOG" && (
@@ -108,5 +130,7 @@ export default function List( { data, index: listIndex } ){
           </DialogActions>
         </Dialog>
       </Container>
+
+      </>
     );
 }

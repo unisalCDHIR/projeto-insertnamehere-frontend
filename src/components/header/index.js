@@ -4,8 +4,6 @@ import { Container } from './styles';
 
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
-import HomeIcon from '@material-ui/icons/Home';
-
 import "../header/styles.css"
 
 import Button from '@material-ui/core/Button';
@@ -14,12 +12,15 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 
+import FilterHdrIcon from '@material-ui/icons/FilterHdr';
+
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 
-export default function Header({board_name, board_description, board_users, board_owner, board_owner_email}){
+export default function Header({board_background, board_name, board_description, board_users, board_owner, board_owner_email}){  //TERMINAR DIALOG BACKGROUNDS
 
     const [openLogout, setOpenLogout] = React.useState(false);
     const [openPeople, setOpenPeople] = React.useState(false);
+    const [openBackgrounds, setOpenBackgrounds] = React.useState(false);
 
     function handleCloseLogout(){
         setOpenLogout(false);
@@ -32,11 +33,14 @@ export default function Header({board_name, board_description, board_users, boar
         window.location = '/login';
     }
 
+
     return (
 
         <>
         <Container>
             <h1> CDHI - Quadros Organizacionais</h1>
+
+            <FilterHdrIcon onClick={() => setOpenBackgrounds(true)} id="backgroundsIcon"/>
 
             <PeopleAltIcon onClick={() => setOpenPeople(true)} id="peopleIcon"/>
 
@@ -73,6 +77,21 @@ export default function Header({board_name, board_description, board_users, boar
             </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenPeople(false)} color="primary">
+            FECHAR
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog open={openBackgrounds} aria-labelledby="form-dialog-title">
+            <DialogContent>
+                  <DialogContentText>
+                      <strong>PLANOS DE FUNDO</strong> 
+                  </DialogContentText>
+                  
+
+            </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenBackgrounds(false)}color="primary">
             FECHAR
           </Button>
         </DialogActions>
