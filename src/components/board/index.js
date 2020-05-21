@@ -10,7 +10,7 @@ import BoardContext from './context'
 
 import DatatoFeed from '../../board/board_feed';
 
-import backgrounds from "../../backgrounds/backgrounds.js"
+import backgrounds from "../../enums/backgrounds.js"
 
 export default function Board_Content({board_background, data_cards, board_id}){
 
