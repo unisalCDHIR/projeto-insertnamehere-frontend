@@ -7,8 +7,11 @@ import { Container } from './styles';
 import { useDrag, useDrop } from 'react-dnd'
 
 import Dialog from '@material-ui/core/Dialog';
+
 import DialogActions from '@material-ui/core/DialogActions';
+
 import DialogContent from '@material-ui/core/DialogContent';
+
 import DialogContentText from '@material-ui/core/DialogContentText';
 
 import CancelIcon from '@material-ui/icons/Cancel';
@@ -21,11 +24,27 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 
 import api from "../../services/api"
 
-export default function Card({ cards, index, listIndex }){
+import { getToken } from '../../authentication/auth';
+
+import EditIcon from '@material-ui/icons/Edit';
+
+import TextField from '@material-ui/core/TextField';
+
+
+
+export default function Card({ cards, index, listIndex, board_id }){
 
     const ref = useRef();
+
     const { move } = useContext(BoardContext);
+
     const [openCardModal, setOpenCardModal] = React.useState(false);
+
+    const [edittedCardName, setEdittedCardName] = React.useState('');
+
+    const [edittedCardDescription, setEdittedCardDescription] = React.useState('');
+
+    const [editCardDialog, seteditCardDialog] = React.useState(false);
 
     const [{isDragging}, dragRef] = useDrag({
       item: { type: 'CARD', index, listIndex, id: cards.id},
@@ -34,12 +53,45 @@ export default function Card({ cards, index, listIndex }){
       })
     });
 
-    function saveCard(){ //put no edit do card
+    let token = getToken();
 
+    function removeElement(id) {
+      var elem = document.getElementById(id);
+      return elem.parentNode.removeChild(elem);
+  }
+
+    function editCard(card_id, column){
+
+      document.getElementById("card_name" + card_id).innerText = edittedCardName;
+      document.getElementById("card_desc" + card_id).innerText = edittedCardDescription;
+
+      setOpenCardModal(false);
+      seteditCardDialog(false);
+
+      api.put("/cards/" + card_id,{
+        boardId: board_id,
+        column: column,
+        description: edittedCardDescription,
+        name: edittedCardName,
+        usersIds:[
+          
+        ]
+      },{
+        headers:{
+          Authorization: token
+        }
+      }).then(res => console.log(res)).catch( err => console.log(err))
     }
 
-    function deleteCard(){ //delete no /cards
-
+    function deleteCard(card_id){ //delete no /cards
+      setOpenCardModal(false);
+      api.delete("/cards/" + card_id,{
+        headers:{
+          Authorization: token
+        }
+      }).then(res => 
+        removeElement(card_id)
+        ).catch(err => console.log(err))
     }
 
     const [, dropRef] = useDrop({
@@ -86,9 +138,9 @@ export default function Card({ cards, index, listIndex }){
       <>
         <Container onClick={() => setOpenCardModal(true)} ref={ref} isDragging={isDragging} id={cards.id}>
           <header>
-            {cards.name}
+            <span id={"card_name" + cards.id}>{cards.name}</span>
           </header>
-          <p>{cards.content}</p>
+          <p id={"card_desc" + cards.id} >{cards.content}</p>
           {cards.id !== "temp" && <img src="https://api.adorable.io/avatars/285/abott@adorable.png" alt=""/>}
         </Container>
 
@@ -98,11 +150,11 @@ export default function Card({ cards, index, listIndex }){
                 <strong>INFORMAÇÃO DO CARD</strong>
               </DialogContentText>
               <DialogContentText>
-                <strong>Nome do card :</strong> 
+                <strong>Nome do card: </strong> 
                 {cards.name}
               </DialogContentText>
               <DialogContentText>
-                <strong>Descrição :</strong>
+                <strong>Descrição: </strong>
                 {cards.content}
               </DialogContentText>
             </DialogContent>
@@ -110,9 +162,30 @@ export default function Card({ cards, index, listIndex }){
             <DialogActions>
               <Button onClick={() => setOpenCardModal(false)}>FECHAR <CancelIcon></CancelIcon></Button>
 
-              <Button onClick={() => saveCard()}>SALVAR <SaveIcon></SaveIcon></Button>
+              <Button onClick={() => seteditCardDialog(true)}>EDITAR <EditIcon></EditIcon></Button>
 
-              <Button onClick={() => deleteCard()}>DELETAR O CARD <DeleteForeverIcon/></Button>
+              <Button onClick={() => deleteCard(cards.id)}>DELETAR O CARD <DeleteForeverIcon/></Button>
+            </DialogActions>
+        </Dialog>
+
+        <Dialog open={editCardDialog} aria-labelledby="form-dialog-title">
+        <DialogContent>
+              <DialogContentText>
+                <strong>INFORMAÇÃO DO CARD</strong>
+              </DialogContentText>
+              <DialogContentText>
+                <strong>Nome do card: </strong> 
+                <TextField onChange={event => setEdittedCardName(event.target.value)} defaultValue={cards.name}> </TextField>
+              </DialogContentText>
+              <DialogContentText>
+                <strong>Descrição: </strong>
+                <TextField onChange={event => setEdittedCardDescription(event.target.value)} defaultValue={cards.content}></TextField>
+              </DialogContentText>
+            </DialogContent>
+
+            <DialogActions>
+              <Button onClick={() => editCard(cards.id, cards.column)}>SALVAR <SaveIcon/></Button>
+              <Button onClick={() => seteditCardDialog(false)}>FECHAR <CancelIcon/></Button>
             </DialogActions>
         </Dialog>
 

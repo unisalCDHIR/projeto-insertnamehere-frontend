@@ -16,6 +16,7 @@ import TextField from '@material-ui/core/TextField';
 import api from '../../services/api';
 import { getToken } from '../../authentication/auth';
 import { makeStyles } from '@material-ui/core/styles';
+import "../list/styles.css"
 
 const useStyles = makeStyles((theme) => ({
   backdrop: {
@@ -47,8 +48,16 @@ export default function List( { data, index: listIndex, board_id } ){
 
   let token = getToken();
 
+  async function addCard(items){
+    //var element = document.getElementById("list");
+    //var item = element.firstChild;
+    //var cln = document.importNode(item, true);
+    //element.appendChild(cln);
+    //cln.setAttribute("id", item.id + 1);
 
-  async function addCard(){
+    console.log(items, "to aqui"); //ver isso depois, tem q clonar um elemento e inserir ele dentro da lista blz? o.o
+    
+
     setLoading(true);
     setOpenAddCard(false);
     api.post("/cards", {
@@ -65,7 +74,7 @@ export default function List( { data, index: listIndex, board_id } ){
       }
   }).then(res => {
     
-    window.location.reload();
+    console.log(data);
     setLoading(false);
     
     }).catch(err => {
@@ -81,22 +90,25 @@ export default function List( { data, index: listIndex, board_id } ){
       </Backdrop>
       <Container refreshState={refreshState}>
         <header>
-          <h2>{data.name}</h2>
+          <div id="col">
+            <p>{data.name}</p>
+          </div>
           {data.name === "BACKLOG" && (
           <button onClick={() => setOpenAddCard(true)} type="button">
               <MdAdd size={24} color="#FFF"/>
           </button>)}
         </header>
 
-        <ul>
-          {data.items.map((card,index) => 
+        <ul id="list">
+          {data.items.map((card,index) =>
           <Card 
             key={card.id}
             listIndex={listIndex} 
             index={index} 
             cards={card} 
             data={data}
-            />)} 
+            board_id={board_id}
+          />)} 
         </ul>
         <Dialog open={openAddCard} aria-labelledby="form-dialog-title">
             <DialogContent>

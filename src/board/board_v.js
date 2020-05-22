@@ -16,6 +16,7 @@ export default function Board() {
   const [boardCards, setBoardCards] = React.useState([]);
   const [boardUsers, setBoardUsers] = React.useState('');
   const [boardOwner, setBoardOwner] = React.useState('');
+  const [boardOwnerId, setBoardOwnerId] = React.useState('');
   const [boardOwnerEmail, setBoardOwnerEmail] = React.useState('');
   const [boardId, setBoardId] = React.useState('');
   const [boardBackground, setBackground] = React.useState('');
@@ -47,6 +48,7 @@ export default function Board() {
       })
       setBoardUsers(res.data.users);
       setBoardOwner(res.data.owner.name);
+      setBoardOwnerId(res.data.owner.id);
       setBoardOwnerEmail(res.data.owner.email);
     })
       .catch(err => {
@@ -59,7 +61,7 @@ export default function Board() {
       <DndProvider backend={HTML5Backend}>
         {boardCards.length > 0 && <Header  board_id={boardId} board_background={boardBackground} board_name={boardName} board_description={boardDesc} board_users={boardUsers} board_owner={boardOwner} board_owner_email={boardOwnerEmail}/>}
         {boardCards.length > 0 && <GlobalStyle />}
-        {boardCards.length > 0 && <Board_Content board_background={boardBackground} board_id={boardId} data_cards={DatatoFeed(boardCards)}/>}
+        {boardCards.length > 0 && <Board_Content board_background={boardBackground} board_id={boardId} data_cards={DatatoFeed(boardCards)} owner={boardOwnerId}/>}
       </DndProvider>
     </>
   );
