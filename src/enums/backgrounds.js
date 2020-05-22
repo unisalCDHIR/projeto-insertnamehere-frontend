@@ -33,7 +33,7 @@ export default function getBackgrounds() {
         id: "B9", content: Background_9
     }, {
         id: "B10", content: Background_10
-    },
+    }
     ]
 
     return backgrounds;
