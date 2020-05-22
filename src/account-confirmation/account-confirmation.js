@@ -77,7 +77,7 @@ export default function AccoutConfirmation() {
             <div className={classes.paper}>
                 <img alt="Logo" src={Logo} style={{ width: 150, height: 150, display: 'block', margin: 'auto', position: 'relative' }} />
                 <br /><br /><br />
-                {error == undefined ?
+                {error === undefined ?
                     <CircularIndeterminate /> :
                     (!error ?
                         <Alert severity="success">{responseMessage}</Alert> :

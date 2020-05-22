@@ -2,7 +2,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import { makeStyles } from '@material-ui/core/styles';
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { getToken, getId } from '../authentication/auth';
 import api from '../services/api.js';
 import './board.css';

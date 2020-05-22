@@ -11,19 +11,17 @@ export default function DatatoFeed(boardCards){
     
       async function feedBoard() {
             boardCards.forEach(element => {
-              console.log(element);
               if (element.column === "BACKLOG") {
-                itemsFromBackendBacklog.push({ id: element.id, content: element.description, name: element.name })
-                console.log(itemsFromBackendBacklog);
+                itemsFromBackendBacklog.push({ id: element.id, content: element.description, name: element.name, column: element.column })
               }
               else if (element.column === "TODO") {
-                itemsFromBackendToDo.push({ id: element.id, content: element.description, name: element.name })
+                itemsFromBackendToDo.push({ id: element.id, content: element.description, name: element.name, column: element.column })
               }
               else if (element.column === "ONGOING") {
-                itemsFromBackendOnGoing.push({ id: element.id, content: element.description, name: element.name })
+                itemsFromBackendOnGoing.push({ id: element.id, content: element.description, name: element.name, column: element.column })
               }
               else if (element.column === "DONE") {
-                itemsFromBackendDone.push({ id: element.id, content: element.description, name: element.name })
+                itemsFromBackendDone.push({ id: element.id, content: element.description, name: element.name, column: element.column })
               }
             });
 

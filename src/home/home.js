@@ -78,9 +78,6 @@ export default function VerticalTabs() {
   const [value, setValue] = React.useState(0);
   const [open, setOpen] = React.useState(false);
 
-  const token = getToken();
-  const id = getId();
-
   // setInterval(() => {
   //   getBoards();
   // }, 5000);

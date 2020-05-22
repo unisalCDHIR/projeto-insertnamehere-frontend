@@ -1,0 +1,9 @@
+#col{
+    height: 3vh;
+    background-color: lightgray;
+    border-radius: 4px;
+    font-style: italic;
+    font-weight: bolder;
+    font-size: 15px;
+    padding: 5px;
+}
