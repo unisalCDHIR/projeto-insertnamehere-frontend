@@ -55,7 +55,7 @@ export default function List( { data, index: listIndex, board_id } ){
     //element.appendChild(cln);
     //cln.setAttribute("id", item.id + 1);
 
-    console.log(items, "to aqui"); //ver isso depois, tem q clonar um elemento e inserir ele dentro da lista blz? o.o
+   //ver isso depois, tem q clonar um elemento e inserir ele dentro da lista blz? o.o
     
 
     setLoading(true);
@@ -74,6 +74,7 @@ export default function List( { data, index: listIndex, board_id } ){
       }
   }).then(res => {
     
+    window.location.reload();
     console.log(data);
     setLoading(false);
     
