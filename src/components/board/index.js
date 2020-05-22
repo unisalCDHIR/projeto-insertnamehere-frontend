@@ -23,7 +23,14 @@ export default function Board_Content({ board_background, data_cards, board_id})
     const [lists, setLists] = useState(data_cards);
 
     function getBackgroundId(board_background){
-      return board_background[1];
+      let board_b = "";
+      if(board_background.length === 3){
+        board_b = board_background[1] + board_background[2];
+      }
+      else{
+        board_b = board_background[1];
+      }
+      return board_b;
      }
 
     const { background } = useContext(HeaderContext);

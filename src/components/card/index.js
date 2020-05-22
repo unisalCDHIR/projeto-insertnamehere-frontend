@@ -17,6 +17,10 @@ import Button from '@material-ui/core/Button';
 
 import SaveIcon from '@material-ui/icons/Save';
 
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+
+import api from "../../services/api"
+
 export default function Card({ cards, index, listIndex }){
 
     const ref = useRef();
@@ -30,7 +34,11 @@ export default function Card({ cards, index, listIndex }){
       })
     });
 
-    function saveCard(){
+    function saveCard(){ //put no edit do card
+
+    }
+
+    function deleteCard(){ //delete no /cards
 
     }
 
@@ -103,6 +111,8 @@ export default function Card({ cards, index, listIndex }){
               <Button onClick={() => setOpenCardModal(false)}>FECHAR <CancelIcon></CancelIcon></Button>
 
               <Button onClick={() => saveCard()}>SALVAR <SaveIcon></SaveIcon></Button>
+
+              <Button onClick={() => deleteCard()}>DELETAR O CARD <DeleteForeverIcon/></Button>
             </DialogActions>
         </Dialog>
 
