@@ -8,8 +8,6 @@ import List from '../list/index';
 
 import BoardContext from './context'
 
-import HeaderContext from '../header/context'
-
 import DatatoFeed from '../../board/board_feed';
 
 import backgrounds from "../../enums/backgrounds.js"
@@ -59,8 +57,6 @@ export default function Board_Content({ board_background, data_cards, board_id, 
       })
    }
 
-    const { background } = useContext(HeaderContext);
-
     function move(fromList, toList, from, to){
       setLists(produce(lists, draft => {
             const dragged = draft[fromList].items[from];
@@ -73,7 +69,7 @@ export default function Board_Content({ board_background, data_cards, board_id, 
     
     return (
       <BoardContext.Provider value={{ lists, move }}>
-        <Container background={backgrounds_data[getBackgroundId(board_background)].content}>
+        <Container id="board" background={backgrounds_data[getBackgroundId(board_background)].content}>
           {lists.map((data, index) => <List board_id={board_id} key={data.name} index={index} data={data}/>)}
         </Container>
       </BoardContext.Provider>
