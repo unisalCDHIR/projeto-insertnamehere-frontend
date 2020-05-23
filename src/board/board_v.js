@@ -20,6 +20,7 @@ export default function Board() {
   const [boardOwnerEmail, setBoardOwnerEmail] = React.useState('');
   const [boardId, setBoardId] = React.useState('');
   const [boardBackground, setBackground] = React.useState('');
+  const [boardFed, setboardFed] = React.useState('');
 
   if (!breakEl) {
     getBoardById();
@@ -39,13 +40,11 @@ export default function Board() {
         Authorization: token  //the token is a variable which holds the token
       }
     }).then(res => {
+      setBoardCards(res.data.cards);
       setBackground(res.data.background);
       setBoardId(res.data.id);
       setBoardName(res.data.name);
       setBoardDesc(res.data.description);
-      res.data.cards.forEach(element => {
-        boardCards.push(element);
-      })
       setBoardUsers(res.data.users);
       setBoardOwner(res.data.owner.name);
       setBoardOwnerId(res.data.owner.id);
@@ -59,9 +58,11 @@ export default function Board() {
   return (
     <>
       <DndProvider backend={HTML5Backend}>
-        {boardCards.length > 0 && <Header  board_id={boardId} board_background={boardBackground} board_name={boardName} board_description={boardDesc} board_users={boardUsers} board_owner={boardOwner} board_owner_email={boardOwnerEmail}/>}
-        {boardCards.length > 0 && <GlobalStyle />}
-        {boardCards.length > 0 && <Board_Content board_background={boardBackground} board_id={boardId} data_cards={DatatoFeed(boardCards)} owner={boardOwnerId}/>}
+        {boardUsers.length > 0 && <Header  board_id={boardId} board_background={boardBackground} board_name={boardName} board_description={boardDesc} board_users={boardUsers} board_owner={boardOwner} board_owner_email={boardOwnerEmail}/>}
+        
+        <GlobalStyle />
+
+        {boardBackground && <Board_Content board_background={boardBackground} board_id={boardId} data_cards={DatatoFeed(boardCards)} owner={boardOwnerId}/>}
       </DndProvider>
     </>
   );

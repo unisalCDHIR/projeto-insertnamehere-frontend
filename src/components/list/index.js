@@ -49,15 +49,6 @@ export default function List( { data, index: listIndex, board_id } ){
   let token = getToken();
 
   async function addCard(items){
-    //var element = document.getElementById("list");
-    //var item = element.firstChild;
-    //var cln = document.importNode(item, true);
-    //element.appendChild(cln);
-    //cln.setAttribute("id", item.id + 1);
-
-   //ver isso depois, tem q clonar um elemento e inserir ele dentro da lista blz? o.o
-    
-
     setLoading(true);
     setOpenAddCard(false);
     api.post("/cards", {
