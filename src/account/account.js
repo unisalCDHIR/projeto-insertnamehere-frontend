@@ -4,6 +4,10 @@ import { getId, getToken } from '../authentication/auth';
 import api from '../services/api.js';
 import { Alert } from '@material-ui/lab';
 import Snackbar from '@material-ui/core/Snackbar'
+import FaceIcon from '@material-ui/icons/Face';
+import "../account/account.css"
+import { green } from '@material-ui/core/colors';
+import GlobalStyle from "../styles/global"
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -55,14 +59,18 @@ export default function Profile() {
 
     //TODO
     return (
-        <div className={classes.root}>
-            Nome: {user.name} <br />
-        Email: {user.email}
-            <Snackbar open={openError} autoHideDuration={6000} onClose={handleCloseError}>
-                <Alert onClose={handleClose} severity="error">
-                    {error}
-                </Alert>
-            </Snackbar>
-        </div>
+        <>
+            <div id="container">
+                <GlobalStyle/>
+                <FaceIcon style={{ fontSize: 100 }} id="userIcon"> </FaceIcon>
+                <br></br><strong>Welcome {user.name}</strong>
+
+                <div id="userInfo">
+                    
+                </div>
+            </div>
+
+            
+        </>
     );
 }
