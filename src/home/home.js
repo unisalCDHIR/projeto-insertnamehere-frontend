@@ -75,7 +75,7 @@ const useStyles = makeStyles((theme) => ({
 export default function VerticalTabs() {
 
   const classes = useStyles();
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = React.useState(1);
   const [open, setOpen] = React.useState(false);
 
   // setInterval(() => {
@@ -107,6 +107,7 @@ export default function VerticalTabs() {
         orientation="vertical"
         variant="scrollable"
         value={value}
+        initialSelectedIndex={value}
         onChange={handleChange}
         aria-label="Vertical tabs example"
         className={classes.tabs}

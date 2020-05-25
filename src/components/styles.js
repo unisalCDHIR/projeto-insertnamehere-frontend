@@ -8,8 +8,7 @@ export const ListItem_ = styled.div`
     box-shadow: 0 5px 15px rgba(0,0,0,.5);
     position: relative;
     overflow: hidden;
-    color: #000;
+    color: white;
     margin: 8px;
-   
 
 `;
