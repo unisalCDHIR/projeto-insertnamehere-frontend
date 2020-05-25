@@ -111,12 +111,13 @@ export default function VerticalTabs() {
         aria-label="Vertical tabs example"
         className={classes.tabs}
         indicatorColor="primary"
+        id="homeTabs"
       >
-        <Tab icon={<AccountCircleIcon id="profile"/>} className={classes.profile} {...a11yProps(0)} />
+        <Tab id="profile" icon={<AccountCircleIcon id="profile"/>} className={classes.profile} {...a11yProps(0)} />
         
-        <Tab icon={<DashboardOutlinedIcon id="boards" />} className={classes.boards} {...a11yProps(1)} />
+        <Tab id="boards" icon={<DashboardOutlinedIcon id="boards" />} className={classes.boards} {...a11yProps(1)} />
             
-        <Tab onClick={handleLogout} icon={<ExitToAppIcon id="logout" />} className={classes.logout} {...a11yProps(2)} />
+        <Tab id="logout" onClick={handleLogout} icon={<ExitToAppIcon id="logout" />} className={classes.logout} {...a11yProps(2)} />
       </Tabs>
 
       <TabPanel value={value} index={0}>

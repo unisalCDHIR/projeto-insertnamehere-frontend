@@ -39,6 +39,10 @@ export default function Header({ board_id, board_background, board_name, board_d
     setOpenLogout(false);
   }
 
+  function redirectToHome(){
+    window.location = "/home";
+  }
+
   let token = getToken();
 
   function handleCloseAndLogout() {
@@ -81,7 +85,7 @@ export default function Header({ board_id, board_background, board_name, board_d
 
   return (
       <Container>
-        <h1> CDHI - Quadros Organizacionais</h1>
+        <h1 onClick={() => redirectToHome()}> CDHI - Quadros Organizacionais</h1>
 
         <FilterHdrIcon onClick={() => setOpenBackgrounds(true)} id="backgroundsIcon" />
 

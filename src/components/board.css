@@ -71,3 +71,14 @@ ListItem {
     font-weight: 900;
 }
 
+#boardDescription{
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    box-shadow: 0 0 8px #000;
+    z-index: 1;
+    overflow: hidden;
+    transform: translateY(100%);
+    transition: 0.5s;
+    opacity: 0;
+}

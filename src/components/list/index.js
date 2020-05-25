@@ -1,21 +1,39 @@
 import React ,{ useRef, useContext } from 'react';
+
 import { Container } from './styles';
+
 import { MdAdd } from 'react-icons/md'
+
 import Card from "../card/index";
+
 import BoardContext from '../board/context'
+
 import { useDrag, useDrop } from 'react-dnd'
+
 import AddCircleIcon from '@material-ui/icons/AddCircle';
+
 import Button from '@material-ui/core/Button';
+
 import Dialog from '@material-ui/core/Dialog';
+
 import DialogActions from '@material-ui/core/DialogActions';
+
 import DialogContent from '@material-ui/core/DialogContent';
+
 import DialogContentText from '@material-ui/core/DialogContentText';
+
 import Backdrop from '@material-ui/core/Backdrop';
+
 import CircularProgress from '@material-ui/core/CircularProgress';
+
 import TextField from '@material-ui/core/TextField';
+
 import api from '../../services/api';
+
 import { getToken } from '../../authentication/auth';
+
 import { makeStyles } from '@material-ui/core/styles';
+
 import "../list/styles.css"
 
 const useStyles = makeStyles((theme) => ({
