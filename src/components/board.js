@@ -20,15 +20,11 @@ import TextField from '@material-ui/core/TextField';
 import Filled from '@material-ui/icons/Delete';
 import { getBoardId, setBoardId } from '../board_content/board_c.js'
 import backgrounds from "../enums/backgrounds"
-import {ListItem_} from "../components/styles"
+import { ListItem_ } from "../components/styles"
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        width: '100%',
-        maxWidth: 360,
-        margin: 5,
-        padding: 0,
-        backgroundColor: theme.palette.background.paper,
+
     },
 }));
 
@@ -179,17 +175,17 @@ export default function Boards() {
         }
     }
 
-    function getBackgroundId(board_background){
+    function getBackgroundId(board_background) {
         let board_b = "";
-        if(board_background.length === 3){
-          board_b = board_background[1] + board_background[2];
-          console.log(board_b);
+        if (board_background.length === 3) {
+            board_b = board_background[1] + board_background[2];
+            console.log(board_b);
         }
-        else{
-          board_b = board_background[1];
+        else {
+            board_b = board_background[1];
         }
         return board_b;
-       }
+    }
 
     async function getBoards() { //paulinho@gmail.com,senha=456456
         setLoadingTrue();
@@ -222,7 +218,7 @@ export default function Boards() {
     return (
         <div className={classess.root}>
             {loading ? <CircularIndeterminate /> :
-                <div>
+                <div id="boardsInstance">
                     <Button onClick={handleAddIcon}>
                         Adicionar
                     <AddCircleIcon id="addIcon">
@@ -266,44 +262,44 @@ export default function Boards() {
                     </Dialog>
                     <div className="listContainer">
                         <List component="nav" aria-label="main mailbox folders" className="list">
-                            {boards ? boards.content.map((board) => 
-                                    <ListItem className="item">
-                                        <ListItem_ background={backgrounds_data[getBackgroundId(board.background)].content}>
+                            {boards ? boards.content.map((board) =>
+                                <ListItem className="item">
+                                    <ListItem_ background={backgrounds_data[getBackgroundId(board.background)].content}>
                                         <ListItemLink href={"/boards/" + board.id}>
-                                        <ListItemText primary="" className="title"/>
-                                        <div className="boardDescription" >
+                                            <ListItemText primary="" className="title" />
+                                            <div className="boardDescription" >
 
-                                            <strong>Nome: </strong> {board.name}
-                                            <br />
-                                            <strong>Descrição: </strong>{board.description}
-                                            <br />
-                                            <strong>Criador do Quadro: </strong>{board.owner.name}
-                                        </div>
+                                                <strong>Nome: </strong> {board.name}
+                                                <br />
+                                                <strong>Descrição: </strong>{board.description}
+                                                <br />
+                                                <strong>Criador do Quadro: </strong>{board.owner.name}
+                                            </div>
                                         </ListItemLink>
-                                        
-                                    <div className="actions">
-                                        {
-                                            Number(id) === board.owner.id ? <IconButton
+
+                                        <div className="actions">
+                                            {
+                                                Number(id) === board.owner.id ? <IconButton
+                                                    variant="contained"
+                                                    color="primary"
+                                                    aria-label="edit"
+                                                    className="editButton"
+                                                    onClick={() => setEditTrue(board)}>
+                                                    <EditIcon />
+                                                </IconButton> : null
+                                            }
+
+                                            <IconButton
                                                 variant="contained"
-                                                color="primary"
-                                                aria-label="edit"
-                                                className="editButton"
-                                                onClick={() => setEditTrue(board)}>
-                                                <EditIcon />
-                                            </IconButton> : null
-                                        }
+                                                color="secondary"
+                                                aria-label="delete"
+                                                className="deleteButton"
+                                                onClick={() => handleDeleteMessage(board)}
+                                            >
+                                                <DeleteIcon />
+                                            </IconButton>
 
-                                        <IconButton
-                                            variant="contained"
-                                            color="secondary"
-                                            aria-label="delete"
-                                            className="deleteButton"
-                                            onClick={() => handleDeleteMessage(board)}
-                                        >
-                                            <DeleteIcon />
-                                        </IconButton>
-
-                                    </div>
+                                        </div>
                                     </ListItem_>
                                     <Dialog open={openEdit} aria-labelledby="form-dialog-title">
                                         <DialogContent>
@@ -369,7 +365,7 @@ export default function Boards() {
                                             </Button>
                                         </DialogContent>
                                     </Dialog>
-                                     
+
                                 </ListItem>
                             ) : null}
                         </List>
