@@ -1,4 +1,4 @@
-#col{
+#col_name{
     height: 3vh;
     background-color: lightgray;
     border-radius: 4px;
@@ -6,4 +6,15 @@
     font-weight: bolder;
     font-size: 15px;
     padding: 5px;
+    margin-top: 5px;
+}
+
+#list_col{
+    background-color: rgba(255, 255, 255, 0.5);
+    margin-right: 15px;
+    border-radius: 10px;
+}
+
+#addCardBtn{
+    margin-top: 5px;
 }

@@ -98,13 +98,13 @@ export default function List( { data, index: listIndex, board_id } ){
       <Backdrop open={loading} >
         <CircularProgress color="inherit" />
       </Backdrop>
-      <Container refreshState={refreshState}>
+      <Container refreshState={refreshState} id="list_col">
         <header>
-          <div id="col">
+          <div id="col_name">
             <p>{data.name}</p>
           </div>
           {data.name === "BACKLOG" && (
-          <button onClick={() => setOpenAddCard(true)} type="button">
+          <button onClick={() => setOpenAddCard(true)} type="button" id="addCardBtn">
               <MdAdd size={24} color="#FFF"/>
           </button>)}
         </header>
