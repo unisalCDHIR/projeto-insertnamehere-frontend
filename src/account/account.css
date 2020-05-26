@@ -1,8 +1,16 @@
-#container{
-    align-items: center;
+#container_account{
+    text-align: center;
     width: 100vh;
     height: 100vh;
     background-color: transparent;
+    position: absolute;
+    padding-top: 50px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    padding: 20px;
+    text-align: center;
 }
 
 #userIcon_container{
@@ -52,4 +60,33 @@
     padding-bottom: 10px;
     width: 150px;
     height: 150px;
+    cursor: pointer;
+}
+
+#userIcon_container_true img:hover{
+    filter: blur(1px);
+}
+
+#editIcon_btn{
+    position: absolute;
+    margin-top: 65px;
+    margin-left: 20px;
+}
+
+#avatars:hover{
+    -ms-transform: scale(1.08); /* IE 9 */
+    transform: scale(1.08);
+    transition: 0.5s;
+    cursor: pointer;
+}
+
+#avatars{
+    width: 200px;
+    border-radius: 10px;
+    border-color: lightblue;
+}
+
+
+.background-selected{
+    border: 10px solid blue;
 }

@@ -8,6 +8,12 @@ import FaceIcon from '@material-ui/icons/Face';
 import "../account/account.css"
 import { green } from '@material-ui/core/colors';
 import avatars_data from "../enums/icons"
+import EditIcon from '@material-ui/icons/Edit';
+import { Dialog, DialogContentText } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import Grid from '@material-ui/core/Grid';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -25,6 +31,7 @@ export default function Profile() {
     const [breakEl, setBreakEl] = React.useState(false);
     const [userAvatar, setUserAvatar] = React.useState('');
     const [avatars, setAvatars] = React.useState(avatars_data);
+    const [openAvatarsDialog, setAvatarsDialog] = React.useState(false);
 
     async function getUser() {
         setBreakEl(true);
@@ -40,21 +47,21 @@ export default function Profile() {
                 err.response.data ? setError(err.response.data.errors[0].defaultMessage) : setError('ERRO DESCONHECIDO');
                 setOpen(true)
                 setOpenError(true);
-            
+
             });
     }
 
-    function getIconId(user_avatar){
+    function getIconId(user_avatar) {
         let board_b = "";
-        if(user_avatar.length === 3){
-          board_b = user_avatar[1] + user_avatar[2];
-          console.log(board_b);
+        if (user_avatar.length === 3) {
+            board_b = user_avatar[1] + user_avatar[2];
+            console.log(board_b);
         }
-        else{
-          board_b = user_avatar[1];
+        else {
+            board_b = user_avatar[1];
         }
         return board_b;
-       }
+    }
 
     // TODO
     // setInterval(() => {
@@ -73,35 +80,78 @@ export default function Profile() {
         setOpenError(false);
     };
 
+    async function putIcon(id, email, name, avatar){
+        
+        api.put("/users/" + id, {
+            avatar: avatar,
+            email: email,
+            name: name
+          }
+          , {
+            headers:{
+              Authorization: token
+          }}).then(res => {
+            document.getElementById("iconImg").setAttribute("src", avatars[getIconId(avatar)].content);
+            setAvatarsDialog(false);
+          } 
+            
+            ).catch(err => 
+              console.log(err)
+            );
+
+    }
+
     //TODO
     return (
         <>
-            {user && userAvatar ? <div id="container">
-            {!userAvatar ?   <div id="userIcon_container">
-                   <FaceIcon style={{ fontSize: 100 }} id="userIcon"> </FaceIcon> 
-                    
-                </div>: <div id="userIcon_container_true">
+            {user && userAvatar ? <div id="container_account">
+                {!userAvatar ? <div id="userIcon_container">
+                    <FaceIcon style={{ fontSize: 100 }} id="userIcon"> </FaceIcon>
 
-                        <img src={avatars[getIconId(userAvatar)].content}></img>
+                </div> : <div id="userIcon_container_true">
 
+                        <img id="iconImg" src={avatars[getIconId(userAvatar)].content}></img>
+                        <span><EditIcon onClick={() => setAvatarsDialog(true)} id="editIcon_btn" color="primary" style={{ fontSize: 60 }} /></span>
                     </div>}
-                    
-                <br/><strong id="welcomeInfo">Bem-vindo {user.name}</strong>
+
+                <br /><strong id="welcomeInfo">Bem-vindo {user.name}</strong>
 
                 <div id="user_info_container">
                     <strong id="yourInfo_title">Suas informações</strong>
-                    <br/><br/>
-                    <strong className="yourInfo">Nome da conta:</strong> <br/> <span className="yourInfo"> {user.name}</span>
-                    <br/>
-                    <strong className="yourInfo">Email da conta:</strong> <br/> <span className="yourInfo"> {user.email}</span>
+                    <br /><br />
+                    <strong className="yourInfo">Nome da conta:</strong> <br /> <span className="yourInfo"> {user.name}</span>
+                    <br />
+                    <strong className="yourInfo">Email da conta:</strong> <br /> <span className="yourInfo"> {user.email}</span>
 
-                    
+
                 </div>
-                
+
+                <Dialog open={openAvatarsDialog} aria-labelledby="form-dialog-title">
+                    <DialogContent>
+                        <DialogContentText>
+                            <strong>AVATARES</strong>
+                        </DialogContentText>
+
+                        <Grid align="center" container spacing={3}>
+                            {avatars.map(avatar => <>
+                                <Grid item sm={6} id="avatarDiv">
+                                    <img onClick={() => putIcon(user.id, user.email, user.name, avatar.id)} id="avatars" className={avatars.id === userAvatar ? "background-selected" : avatar.id} src={avatar.content}></img>
+                                </Grid>
+                            </>)}
+                        </Grid>
+
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={() => setAvatarsDialog(false)} color="primary">
+                            FECHAR
+                    </Button>
+                    </DialogActions>
+                </Dialog>
 
             </div> : null}
+
         </>
-            
-        
+
+
     );
 }
