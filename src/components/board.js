@@ -21,6 +21,7 @@ import Filled from '@material-ui/icons/Delete';
 import { getBoardId, setBoardId } from '../board_content/board_c.js'
 import backgrounds from "../enums/backgrounds"
 import { ListItem_ } from "../components/styles"
+import Paper from '@material-ui/core/Paper';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -219,13 +220,21 @@ export default function Boards() {
         <div className={classess.root}>
             {loading ? <CircularIndeterminate /> :
                 <div id="boardsInstance">
-                    <Button onClick={handleAddIcon}>
-                        Adicionar
-                    <AddCircleIcon id="addIcon">
-
-                        </AddCircleIcon>
-                    </Button>
-
+                    <div className="row">
+                        <div>
+                            <Paper elevation={24}>
+                                <h2>
+                                    Meus quadros
+                                </h2>
+                            </Paper>
+                        </div>
+                        <div>
+                            <Button id="add-button" onClick={handleAddIcon}>
+                                Adicionar
+                            <AddCircleIcon id="addIcon"></AddCircleIcon>
+                            </Button>
+                        </div>
+                    </div>
                     <Dialog open={addDialog}>
                         <DialogContent>
                             <DialogContentText id="addBoardTitle">
@@ -373,6 +382,6 @@ export default function Boards() {
                 </div>
             }
 
-        </div>
+        </div >
     )
 }

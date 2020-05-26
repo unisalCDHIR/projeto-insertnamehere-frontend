@@ -113,11 +113,11 @@ export default function VerticalTabs() {
         indicatorColor="primary"
         id="homeTabs"
       >
-        <Tab id="profile" icon={<AccountCircleIcon color="primary" id="profile"/>} className={classes.profile} {...a11yProps(0)} />
+        <Tab id="profile" icon={<AccountCircleIcon id="profile"/>} className={classes.profile} {...a11yProps(0)} />
         
-        <Tab id="boards" icon={<DashboardOutlinedIcon color="primary" id="boards" />} className={classes.boards} {...a11yProps(1)} />
+        <Tab id="boards" icon={<DashboardOutlinedIcon id="boards" />} className={classes.boards} {...a11yProps(1)} />
             
-        <Tab id="logout" onClick={handleLogout} icon={<ExitToAppIcon color="primary" id="logout" />} className={classes.logout} {...a11yProps(2)} />
+        <Tab id="logout" onClick={handleLogout} icon={<ExitToAppIcon id="logout" />} className={classes.logout} {...a11yProps(2)} />
       </Tabs>
 
       <TabPanel value={value} index={0}>

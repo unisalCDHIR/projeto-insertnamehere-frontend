@@ -61,7 +61,6 @@ export default function Profile() {
     return (
         <>
             <div id="container">
-                <GlobalStyle/>
                 <FaceIcon style={{ fontSize: 100 }} id="userIcon"> </FaceIcon>
                 <br></br><strong>Welcome {user.name}</strong>
 
