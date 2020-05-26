@@ -7,8 +7,31 @@
     background-color: rgba(0, 0, 0, 0.5);
 }
 
+#add-button {
+    background-color: rgb(80, 80, 199);
+    color: white;
+    padding: 20px;
+}
+
+.row {
+    display: flex;
+    width: 100%;
+}
+
+.row div {
+    width: 50%;
+}
+
+.row div h2 {
+    margin: 0;
+    padding: 20px;
+}
+
+.row div:nth-child(2) {
+    text-align: right;
+}
+
 .list {
-    margin: 40px;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-column-gap: 10px;
@@ -26,8 +49,9 @@ body {
     background-color: white;
 }
 
-ListItem {
-    border: solid black 0.1px;
+.item:hover {
+    transform: scale(1.05);
+    transition: 0.5s;
 }
 
 /* .item {
