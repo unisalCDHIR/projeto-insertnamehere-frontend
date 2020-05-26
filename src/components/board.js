@@ -1,27 +1,26 @@
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import { makeStyles } from '@material-ui/core/styles';
-import React from 'react';
-import { getToken, getId } from '../authentication/auth';
-import api from '../services/api.js';
-import './board.css';
-import CircularIndeterminate from '../components/loading.js'
-import AddCircleIcon from '@material-ui/icons/AddCircle';
-import DeleteIcon from '@material-ui/icons/Delete';
-import IconButton from '@material-ui/core/IconButton';
-import EditIcon from '@material-ui/icons/Edit';
+import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Filled from '@material-ui/icons/Delete';
-import { getBoardId, setBoardId } from '../board_content/board_c.js'
-import backgrounds from "../enums/backgrounds"
-import { ListItem_ } from "../components/styles"
+import IconButton from '@material-ui/core/IconButton';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
 import Paper from '@material-ui/core/Paper';
+import { makeStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
+import { default as DeleteIcon, default as Filled } from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
+import React from 'react';
+import { getId, getToken } from '../authentication/auth';
+import { getBoardId, setBoardId } from '../board_content/board_c.js';
+import CircularIndeterminate from '../components/loading.js';
+import { ListItem_ } from "../components/styles";
+import backgrounds from "../enums/backgrounds";
+import api from '../services/api.js';
+import './board.css';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -218,7 +217,9 @@ export default function Boards() {
     const classes = useStyles();
     return (
         <div className={classess.root}>
-            {loading ? <CircularIndeterminate /> :
+            {loading ? <div class="board-is-loading">
+                <CircularIndeterminate />
+            </div> :
                 <div id="boardsInstance">
                     <div className="row">
                         <div>
