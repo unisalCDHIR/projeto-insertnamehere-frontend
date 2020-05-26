@@ -112,7 +112,8 @@ export default function SignUp() {
     setLoading(false);
   }
   return (
-    <div id="background">
+    <>
+    <div className="background_signup"/>
     <Container id="container" component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
@@ -221,6 +222,7 @@ export default function SignUp() {
         </Alert>
       </Snackbar>
     </Container>
-    </div>
+    </>
   );
+  
 }
