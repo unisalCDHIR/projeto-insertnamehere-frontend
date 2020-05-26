@@ -50,7 +50,6 @@ body {
 }
 
 .item:hover {
-    -webkit-animation: none;
     transform: scale(1.05);
     transition: 0.5s;
 }

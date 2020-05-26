@@ -6,6 +6,10 @@ nav{
     margin: -10px;
 }
 
+#homeTabs {
+    width: 150px;
+}
+
 .nav-links{
     display: flex;
     justify-content: space-around;
