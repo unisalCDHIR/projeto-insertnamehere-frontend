@@ -112,7 +112,8 @@ export default function SignUp() {
     setLoading(false);
   }
   return (
-    <Container component="main" maxWidth="xs">
+    <div id="background">
+    <Container id="container" component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
         <img alt="Logo" src={Logo} style={{ width: 150, height: 150, display: 'block', margin: 'auto', position: 'relative' }} />
@@ -220,6 +221,6 @@ export default function SignUp() {
         </Alert>
       </Snackbar>
     </Container>
-    
+    </div>
   );
 }

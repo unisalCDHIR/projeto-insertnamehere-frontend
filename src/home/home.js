@@ -51,7 +51,6 @@ function a11yProps(index) {
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    backgroundColor: theme.palette.background.paper,
     display: 'flex',
     height: '100vh',
   },
@@ -75,7 +74,7 @@ const useStyles = makeStyles((theme) => ({
 export default function VerticalTabs() {
 
   const classes = useStyles();
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = React.useState(1);
   const [open, setOpen] = React.useState(false);
 
   // setInterval(() => {
@@ -107,16 +106,18 @@ export default function VerticalTabs() {
         orientation="vertical"
         variant="scrollable"
         value={value}
+        initialSelectedIndex={value}
         onChange={handleChange}
         aria-label="Vertical tabs example"
         className={classes.tabs}
         indicatorColor="primary"
+        id="homeTabs"
       >
-        <Tab icon={<AccountCircleIcon id="profile"/>} className={classes.profile} {...a11yProps(0)} />
+        <Tab id="profile" icon={<AccountCircleIcon id="profile"/>} className={classes.profile} {...a11yProps(0)} />
         
-        <Tab icon={<DashboardOutlinedIcon id="boards" />} className={classes.boards} {...a11yProps(1)} />
+        <Tab id="boards" icon={<DashboardOutlinedIcon id="boards" />} className={classes.boards} {...a11yProps(1)} />
             
-        <Tab onClick={handleLogout} icon={<ExitToAppIcon id="logout" />} className={classes.logout} {...a11yProps(2)} />
+        <Tab id="logout" onClick={handleLogout} icon={<ExitToAppIcon id="logout" />} className={classes.logout} {...a11yProps(2)} />
       </Tabs>
 
       <TabPanel value={value} index={0}>

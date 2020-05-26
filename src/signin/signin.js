@@ -22,7 +22,7 @@ import { login } from '../authentication/auth'
 
 function Copyright() {
   return (
-    <Typography variant="body2" color="textSecondary" align="center">
+    <Typography id="copyright" variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
       CDHI
       {' '}
@@ -105,7 +105,8 @@ export default function SignIn() {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
+    <div className="background">
+    <Container component="main" maxWidth="xs" className="container">
       <CssBaseline />
       <div className={classes.paper}>
         <img alt="Logo" src={Logo} style={{ width: 150, height: 150, display: 'block', margin: 'auto', position: 'relative' }} />
@@ -205,5 +206,6 @@ export default function SignIn() {
         </DialogActions>
       </Dialog>
     </Container>
+    </div>
   );
 }

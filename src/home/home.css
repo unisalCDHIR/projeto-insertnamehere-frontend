@@ -6,8 +6,11 @@ nav{
     margin: -10px;
 }
 
+#homeTabs {
+    width: 150px;
+}
+
 .nav-links{
-    width: 50%;
     display: flex;
     justify-content: space-around;
     align-items: center;

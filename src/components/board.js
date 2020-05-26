@@ -1,31 +1,30 @@
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import { makeStyles } from '@material-ui/core/styles';
-import React from 'react';
-import { getToken, getId } from '../authentication/auth';
-import api from '../services/api.js';
-import './board.css';
-import CircularIndeterminate from '../components/loading.js'
-import AddCircleIcon from '@material-ui/icons/AddCircle';
-import DeleteIcon from '@material-ui/icons/Delete';
-import IconButton from '@material-ui/core/IconButton';
-import EditIcon from '@material-ui/icons/Edit';
+import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
-import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import Paper from '@material-ui/core/Paper';
+import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import Filled from '@material-ui/icons/Delete';
-import { getBoardId, setBoardId } from '../board_content/board_c.js'
+import AddCircleIcon from '@material-ui/icons/AddCircle';
+import { default as DeleteIcon, default as Filled } from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
+import React from 'react';
+import { getId, getToken } from '../authentication/auth';
+import { getBoardId, setBoardId } from '../board_content/board_c.js';
+import CircularIndeterminate from '../components/loading.js';
+import { ListItem_ } from "../components/styles";
+import backgrounds from "../enums/backgrounds";
+import api from '../services/api.js';
+import './board.css';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        width: '100%',
-        maxWidth: 360,
-        margin: 5,
-        backgroundColor: theme.palette.background.paper,
+
     },
 }));
 
@@ -48,6 +47,7 @@ export default function Boards() {
     const [newBoardName, setNewBoardName] = React.useState('');
     const [newBoardDesc, setNewBoardDesc] = React.useState('');
     const token = getToken();
+    const [backgrounds_data, setBackgrounds] = React.useState(backgrounds);
     const id = getId();
 
     const setLoadingTrue = () => {
@@ -67,6 +67,8 @@ export default function Boards() {
 
         setOpenEdit(true);
     }
+
+    console.log(boards);
 
     const setEditFalse = () => {
         setEditedBoardName(null);
@@ -173,6 +175,18 @@ export default function Boards() {
         }
     }
 
+    function getBackgroundId(board_background) {
+        let board_b = "";
+        if (board_background.length === 3) {
+            board_b = board_background[1] + board_background[2];
+            console.log(board_b);
+        }
+        else {
+            board_b = board_background[1];
+        }
+        return board_b;
+    }
+
     async function getBoards() { //paulinho@gmail.com,senha=456456
         setLoadingTrue();
         setBreakEl(true);
@@ -203,15 +217,25 @@ export default function Boards() {
     const classes = useStyles();
     return (
         <div className={classess.root}>
-            {loading ? <CircularIndeterminate /> :
-                <div>
-                    <Button onClick={handleAddIcon}>
-                        Adicionar
-                    <AddCircleIcon id="addIcon">
-
-                        </AddCircleIcon>
-                    </Button>
-
+            {loading ? <div class="board-is-loading">
+                <CircularIndeterminate />
+            </div> :
+                <div id="boardsInstance">
+                    <div className="row">
+                        <div>
+                            <Paper elevation={24}>
+                                <h2>
+                                    Meus quadros
+                                </h2>
+                            </Paper>
+                        </div>
+                        <div>
+                            <Button id="add-button" onClick={handleAddIcon}>
+                                Adicionar
+                            <AddCircleIcon id="addIcon"></AddCircleIcon>
+                            </Button>
+                        </div>
+                    </div>
                     <Dialog open={addDialog}>
                         <DialogContent>
                             <DialogContentText id="addBoardTitle">
@@ -250,41 +274,43 @@ export default function Boards() {
                         <List component="nav" aria-label="main mailbox folders" className="list">
                             {boards ? boards.content.map((board) =>
                                 <ListItem className="item">
-                                    <ListItemLink href={"/boards/" + board.id}>
-                                        <ListItemText primary="" className="title" />
-                                        <div className="boardDescription">
+                                    <ListItem_ background={backgrounds_data[getBackgroundId(board.background)].content}>
+                                        <ListItemLink href={"/boards/" + board.id}>
+                                            <ListItemText primary="" className="title" />
+                                            <div className="boardDescription" >
 
-                                            <strong>Nome: </strong> {board.name}
-                                            <br />
-                                            <strong>Descrição: </strong>{board.description}
-                                            <br />
-                                            <strong>Criador do Quadro: </strong>{board.owner.name}
-                                        </div>
-                                    </ListItemLink>
-                                    <div className="actions">
-                                        {
-                                            Number(id) === board.owner.id ? <IconButton
+                                                <strong>Nome: </strong> {board.name}
+                                                <br />
+                                                <strong>Descrição: </strong>{board.description}
+                                                <br />
+                                                <strong>Criador do Quadro: </strong>{board.owner.name}
+                                            </div>
+                                        </ListItemLink>
+
+                                        <div className="actions">
+                                            {
+                                                Number(id) === board.owner.id ? <IconButton
+                                                    variant="contained"
+                                                    color="primary"
+                                                    aria-label="edit"
+                                                    className="editButton"
+                                                    onClick={() => setEditTrue(board)}>
+                                                    <EditIcon />
+                                                </IconButton> : null
+                                            }
+
+                                            <IconButton
                                                 variant="contained"
-                                                color="primary"
-                                                aria-label="edit"
-                                                className="editButton"
-                                                onClick={() => setEditTrue(board)}>
-                                                <EditIcon />
-                                            </IconButton> : null
-                                        }
+                                                color="secondary"
+                                                aria-label="delete"
+                                                className="deleteButton"
+                                                onClick={() => handleDeleteMessage(board)}
+                                            >
+                                                <DeleteIcon />
+                                            </IconButton>
 
-                                        <IconButton
-                                            variant="contained"
-                                            color="secondary"
-                                            aria-label="delete"
-                                            className="deleteButton"
-                                            onClick={() => handleDeleteMessage(board)}
-                                        >
-                                            <DeleteIcon />
-                                        </IconButton>
-
-                                    </div>
-
+                                        </div>
+                                    </ListItem_>
                                     <Dialog open={openEdit} aria-labelledby="form-dialog-title">
                                         <DialogContent>
                                             <DialogContentText id="editBoardDialog">
@@ -357,6 +383,6 @@ export default function Boards() {
                 </div>
             }
 
-        </div>
+        </div >
     )
 }
