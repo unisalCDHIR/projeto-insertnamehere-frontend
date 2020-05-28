@@ -39,6 +39,7 @@ export default function Boards() {
     const [loading, setLoading] = React.useState(false);
     const [boards, setBoards] = React.useState('');
     const [breakEl, setBreakEl] = React.useState(false);
+    const [editedBoardId, setEditedBoardId] = React.useState(null);
     const [editedBoardName, setEditedBoardName] = React.useState(null);
     const [editedBoardDescription, setEditedBoardDescription] = React.useState(null);
     const [deleteWarning, setDeleteWarning] = React.useState(false);
@@ -59,6 +60,8 @@ export default function Boards() {
     }
 
     const setEditTrue = (board) => {
+        setEditedBoardId(board.id);
+
         if (editedBoardName === null)
             setEditedBoardName(board.name);
 
@@ -67,8 +70,6 @@ export default function Boards() {
 
         setOpenEdit(true);
     }
-
-    console.log(boards);
 
     const setEditFalse = () => {
         setEditedBoardName(null);
@@ -127,7 +128,6 @@ export default function Boards() {
             }).then(res => {
 
             }).catch(err => {
-                console.log(err);
             })
         }
         else {
@@ -155,7 +155,7 @@ export default function Boards() {
     function handleEditCloseAndSend(board) {
         if (openEdit) {
             setLoadingTrue();
-            api.put('/boards/' + board.id,
+            api.put('/boards/' + editedBoardId,
                 {
                     name: editedBoardName,
                     description: editedBoardDescription
@@ -179,7 +179,6 @@ export default function Boards() {
         let board_b = "";
         if (board_background.length === 3) {
             board_b = board_background[1] + board_background[2];
-            console.log(board_b);
         }
         else {
             board_b = board_background[1];
