@@ -24,17 +24,27 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 
 import api from "../../services/api"
 
-import { getToken } from '../../authentication/auth';
+import { getToken, getId } from '../../authentication/auth';
 
 import EditIcon from '@material-ui/icons/Edit';
 
 import TextField from '@material-ui/core/TextField';
+
+import icons_data from "../../enums/icons.js"
+
+import Tooltip from '@material-ui/core/Tooltip';
+
+import IconButton from '@material-ui/core/IconButton';
 
 
 
 export default function Card({ cards, index, listIndex, board_id }){
 
     const ref = useRef();
+
+    const user_id = getId();
+
+    let token = getToken();
 
     const { move } = useContext(BoardContext);
 
@@ -46,14 +56,26 @@ export default function Card({ cards, index, listIndex, board_id }){
 
     const [editCardDialog, seteditCardDialog] = React.useState(false);
 
+    const [icons, setIcons] = React.useState(icons_data);
+
+    function getIconId(user_avatar) {
+      let board_b = "";
+      if (user_avatar.length === 3) {
+          board_b = user_avatar[1] + user_avatar[2];
+          console.log(board_b);
+      }
+      else {
+          board_b = user_avatar[1];
+      }
+      return board_b;
+  }
+
     const [{isDragging}, dragRef] = useDrag({
       item: { type: 'CARD', index, listIndex, id: cards.id},
       collect: monitor => ({
         isDragging: monitor.isDragging(),
       })
     });
-
-    let token = getToken();
 
     function removeElement(id) {
       var elem = document.getElementById(id);
@@ -136,12 +158,22 @@ export default function Card({ cards, index, listIndex, board_id }){
     return (
 
       <>
-        <Container onClick={() => setOpenCardModal(true)} ref={ref} isDragging={isDragging} id={cards.id}>
+       <Container onClick={() => setOpenCardModal(true)} ref={ref} isDragging={isDragging} id={cards.id}>
           <header>
-            <span id={"card_name" + cards.id}>{cards.name}</span>
+            <span id={"card_name" + cards.id}><strong>{cards.name}</strong></span>
           </header>
           <p id={"card_desc" + cards.id} >{cards.content}</p>
-          {cards.id !== "temp" && <img src="https://api.adorable.io/avatars/285/abott@adorable.png" alt=""/>}
+          <br/>
+          {cards.users[0].avatar && cards.users.map(user =>
+            <>
+              <Tooltip title={user.name}>
+                  <img className="icon_" style={{margin:4}}src={icons[getIconId(user.avatar)].content} alt=""/>
+              </Tooltip>
+            </>
+          )}
+
+          
+          
         </Container>
 
         <Dialog open={openCardModal} aria-labelledby="form-dialog-title">

@@ -30,6 +30,15 @@ export const Container = styled.div`
         
     }
 
+    .userNameIcon{
+        display: none;
+    }
+
+    .icon_:hover~.userNameIcon{
+        display: block;
+    }
+    
+
     ${props => props.id === "temp" && css`
         border: 2px dashed rgba(0,0,0,0.2);
         padding-top: 31px;

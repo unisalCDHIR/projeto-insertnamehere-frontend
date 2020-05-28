@@ -18,6 +18,9 @@ import HTML5Backend from 'react-dnd-html5-backend'
 
 export default function Board() {
 
+  var token = getToken();
+  let user_id = getId();
+
   const [breakEl, setBreakEl] = React.useState(false);
 
   const [boardName, setBoardName] = React.useState('');
@@ -40,6 +43,41 @@ export default function Board() {
   
   const [boardFed, setboardFed] = React.useState('');
 
+  const [userAvatar, setUserAvatar] = React.useState('');
+
+  const [lockState, setLockState] = React.useState(false);
+
+    if(!lockState){
+      getUserIcon();
+    }
+    
+    function getIconId(user_avatar) {
+      let board_b = "";
+      if (user_avatar.length === 3) {
+          board_b = user_avatar[1] + user_avatar[2];
+          console.log(board_b);
+      }
+      else {
+          board_b = user_avatar[1];
+      }
+      return board_b;
+    }
+
+    async function getUserIcon(){
+      setLockState(true);
+      api.get("/users/" + user_id,{},{
+        headers:{
+          Authorization: token
+        }
+      }).then(res => {
+        setUserAvatar(res.data.avatar);
+        
+
+      }).catch(err =>{
+        console.log(err);
+      })
+    }
+
   if (!breakEl) {
     getBoardById();
   }
@@ -52,7 +90,6 @@ export default function Board() {
   async function getBoardById() {
     setBreakEl(true);
     var boardId = getBoardId();
-    var token = getToken();
     await api.get('/boards/' + boardId, {
       headers: {
         Authorization: token  //the token is a variable which holds the token
