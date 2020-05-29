@@ -164,13 +164,13 @@ export default function Card({ cards, index, listIndex, board_id }){
           </header>
           <p id={"card_desc" + cards.id} >{cards.content}</p>
           <br/>
-          {cards.users[0].avatar && cards.users.map(user =>
+          {cards.users[0] ? cards.users[0].avatar && cards.users.map(user =>
             <>
               <Tooltip title={user.name}>
                   <img className="icon_" style={{margin:4}}src={icons[getIconId(user.avatar)].content} alt=""/>
               </Tooltip>
             </>
-          )}
+          ) : null}
 
           
           

@@ -38,6 +38,8 @@ import Chip from '@material-ui/core/Chip';
 
 import icons_data from '../../enums/icons.js'
 
+import Avatar from '@material-ui/core/Avatar';
+
 
 export default function Header({ board_id, board_background, board_name, board_description, board_users, board_owner, board_owner_email }) {  //TERMINAR DIALOG BACKGROUNDS
 
@@ -48,10 +50,11 @@ export default function Header({ board_id, board_background, board_name, board_d
   const [backgroundId, setBackgroundId] = React.useState(board_background);
   const [addPeople, setAddpeople] = React.useState(false);
   const [userName, setUsername] = React.useState('');
-  const [userNameChip, setUsernameChip] = React.useState(false);
-  const [userRes, setUserRes] = React.useState([]);
-
-  const users = [];
+  const user_email = [];
+  const [userRes, setUserRes] = React.useState({});
+  const [lockState, setLockState] = React.useState(false);
+  const [icons, setIcons] = React.useState(icons_data);
+  const [usertoBoard, setUsertoBoard] = React.useState("");
 
   function handleCloseLogout() {
     setOpenLogout(false);
@@ -94,20 +97,49 @@ export default function Header({ board_id, board_background, board_name, board_d
     return board_b;
    }
 
-   async function getUserByName(username){ //ver amanha terminar amanha legal falta isso e mais algumas coisas aaaaa
-     setUsername(username);
-     api.get("/users" + "?name=" + userName,{
+   if(!lockState){
+     getAllUsers();
+   }
+
+   console.log(userRes);
+
+   async function getAllUsers(){
+     setLockState(true); //ver amanha terminar amanha legal falta isso e mais algumas coisas aaaaa
+     api.get("/users",{
        headers: {
          Authorization: token
        }
      }).then(res => {
-      setUsernameChip(true);
-      users.push(res.data);
+      setUserRes(res.data); 
       
      }).catch(err => {
       console.log(err);
      })
-     setUsernameChip(false);
+     
+   }
+
+   function searchingFor(userName){
+
+    return function(user){
+      return user.name.toLowerCase().includes(userName.toLowerCase()) || !userName;
+    }
+    
+   }
+
+   async function putUserInBoard(user_id){
+
+       setOpenPeople(false);
+       api.post("/boards/" + board_id + "/" + user_id,{},{
+         headers: {
+           Authorization: token
+         }
+       }).
+       catch(res => 
+        console.log(res)
+        ).
+       catch(err =>
+        console.log(err)) 
+
    }
 
 
@@ -179,18 +211,18 @@ export default function Header({ board_id, board_background, board_name, board_d
           </DialogContent>
           {addPeople && <DialogContent>
               <DialogContentText>
-               <strong> Nome do usuário: </strong> <TextField id="txt_username" onChange={event => getUserByName(event.target.value)}/> <IconButton> <SearchIcon/> </IconButton>
+               <strong> Nome do usuário: </strong> <TextField id="txt_username" onChange={event => setUsername(event.target.value)}/> <IconButton> <SearchIcon/> </IconButton>
               </DialogContentText>
+            {userRes.filter(searchingFor(userName)).map(user => 
+            <DialogContentText>
+                  <Chip onClick={() => setUsertoBoard(user.id)} avatar={<Avatar src={icons[getIconId(user.avatar)].content} />} label={user.name + " / " + user.email}></Chip></DialogContentText>)}
             </DialogContent>}
-
-          {userNameChip && users.map(user => <Chip
-                label={user.name}
-                variant="outlined"
-          />)}
-
           <DialogActions>
             <Button onClick={() => setOpenPeople(false)} color="primary">
               FECHAR
+          </Button>
+          <Button onClick={() => putUserInBoard(usertoBoard)} color="primary">
+              ADICIONAR USUÁRIO
           </Button>
           </DialogActions>
         </Dialog>
