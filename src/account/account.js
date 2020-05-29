@@ -14,6 +14,7 @@ import Button from '@material-ui/core/Button';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import Grid from '@material-ui/core/Grid';
+import TextField from '@material-ui/core/TextField';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -32,6 +33,9 @@ export default function Profile() {
     const [userAvatar, setUserAvatar] = React.useState('');
     const [avatars, setAvatars] = React.useState(avatars_data);
     const [openAvatarsDialog, setAvatarsDialog] = React.useState(false);
+    const [openEditUserInfo, setEditUserInfo] = React.useState(false);
+    const [edittedUsername, setUsername] = React.useState('');
+    const [edittedEmail, setedittedEmail] = React.useState('');
 
     async function getUser() {
         setBreakEl(true);
@@ -80,6 +84,9 @@ export default function Profile() {
         setOpenError(false);
     };
 
+    console.log(user.name);
+    console.log(user.email);
+
     async function putIcon(id, email, name, avatar){
         
         api.put("/users/" + id, {
@@ -100,17 +107,41 @@ export default function Profile() {
             );
 
     }
+    console.log(edittedEmail);
+    
+    async function saveEdittedUserInfo(){
+
+        
+
+        api.put("/users/" + id, {
+            avatar: userAvatar,
+            name: edittedUsername,
+          }
+          , {
+            headers:{
+              Authorization: token
+          }}).then(res => {
+            setEditUserInfo(false);
+            
+            window.location.reload();
+            
+          } 
+            
+            ).catch(err => 
+              console.log(err)
+            );
+    }
 
     //TODO
     return (
         <>
             {user && userAvatar ? <div id="container_account">
                 {!userAvatar ? <div id="userIcon_container">
-                    <FaceIcon style={{ fontSize: 100 }} id="userIcon"> </FaceIcon>
+                    <FaceIcon onClick={() => setAvatarsDialog(true)} style={{ fontSize: 100 }} id="userIcon"> </FaceIcon>
 
                 </div> : <div id="userIcon_container_true">
 
-                        <img id="iconImg" src={avatars[getIconId(userAvatar)].content}></img>
+                        <img onClick={() => setAvatarsDialog(true)} id="iconImg" src={avatars[getIconId(userAvatar)].content}></img>
                         <span><EditIcon onClick={() => setAvatarsDialog(true)} id="editIcon_btn" color="primary" style={{ fontSize: 60 }} /></span>
                     </div>}
 
@@ -123,7 +154,7 @@ export default function Profile() {
                     <br />
                     <strong className="yourInfo">Email da conta:</strong> <br /> <span className="yourInfo"> {user.email}</span>
 
-
+                    <EditIcon onClick={() => setEditUserInfo(true)} id="editIcon_userInfo" color="primary" style={{ fontSize: 60 }} />
                 </div>
 
                 <Dialog open={openAvatarsDialog} aria-labelledby="form-dialog-title">
@@ -135,7 +166,7 @@ export default function Profile() {
                         <Grid align="center" container spacing={3}>
                             {avatars.map(avatar => <>
                                 <Grid item sm={6} id="avatarDiv">
-                                    <img onClick={() => putIcon(user.id, user.email, user.name, avatar.id)} id="avatars" className={avatars.id === userAvatar ? "background-selected" : avatar.id} src={avatar.content}></img>
+                                    <img onClick={() => putIcon(user.id, user.email, user.name, avatar.id)} id="avatars" className={avatars.id === userAvatar ? "icon-selected" : avatar.id} src={avatar.content}></img>
                                 </Grid>
                             </>)}
                         </Grid>
@@ -144,6 +175,27 @@ export default function Profile() {
                     <DialogActions>
                         <Button onClick={() => setAvatarsDialog(false)} color="primary">
                             FECHAR
+                    </Button>
+                    </DialogActions>
+                </Dialog>
+
+                <Dialog open={openEditUserInfo} aria-labelledby="form-dialog-title">
+                    <DialogContent>
+                        <DialogContentText>
+                            <strong>SUA INFORMAÇÃO</strong>
+                        </DialogContentText>
+
+                        <DialogContentText>
+                            Nome da conta: <TextField onChange={event => setUsername(event.target.value)}></TextField>
+                        </DialogContentText>
+
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={() => setEditUserInfo(false)} color="primary">
+                            FECHAR
+                    </Button>
+                    <Button onClick={() => saveEdittedUserInfo(false)} color="primary">
+                            SALVAR
                     </Button>
                     </DialogActions>
                 </Dialog>

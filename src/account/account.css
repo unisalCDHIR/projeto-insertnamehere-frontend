@@ -87,6 +87,11 @@
 }
 
 
-.background-selected{
+.icon-selected{
     border: 10px solid blue;
+}
+
+#editIcon_userInfo{
+    position: absolute;
+    margin-left: 160px;
 }

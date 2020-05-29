@@ -12,6 +12,10 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 
+import TextField from '@material-ui/core/TextField';
+
+import IconButton from '@material-ui/core/IconButton'
+
 import BoardBackgroundContext from "../board/context.js"
 
 import FilterHdrIcon from '@material-ui/icons/FilterHdr';
@@ -26,6 +30,16 @@ import api from '../../services/api.js'
 
 import { getToken } from '../../authentication/auth';
 
+import AddCircleIcon from '@material-ui/icons/AddCircle';
+
+import SearchIcon from '@material-ui/icons/Search';
+
+import Chip from '@material-ui/core/Chip';
+
+import icons_data from '../../enums/icons.js'
+
+import Avatar from '@material-ui/core/Avatar';
+
 
 export default function Header({ board_id, board_background, board_name, board_description, board_users, board_owner, board_owner_email }) {  //TERMINAR DIALOG BACKGROUNDS
 
@@ -34,6 +48,13 @@ export default function Header({ board_id, board_background, board_name, board_d
   const [openBackgrounds, setOpenBackgrounds] = React.useState(false);
   const [backgroundArr, setBackgroundArr] = React.useState(backgrounds);
   const [backgroundId, setBackgroundId] = React.useState(board_background);
+  const [addPeople, setAddpeople] = React.useState(false);
+  const [userName, setUsername] = React.useState('');
+  const user_email = [];
+  const [userRes, setUserRes] = React.useState({});
+  const [lockState, setLockState] = React.useState(false);
+  const [icons, setIcons] = React.useState(icons_data);
+  const [usertoBoard, setUsertoBoard] = React.useState("");
 
   function handleCloseLogout() {
     setOpenLogout(false);
@@ -63,6 +84,64 @@ export default function Header({ board_id, board_background, board_name, board_d
     }
     return board_b;
    }
+
+   function getIconId(icon){
+    let board_b = "";
+    if(icon.length === 3){
+      board_b = icon[1] + icon[2];
+      console.log(board_b);
+    }
+    else{
+      board_b = icon[1];
+    }
+    return board_b;
+   }
+
+   if(!lockState){
+     getAllUsers();
+   }
+
+   console.log(userRes);
+
+   async function getAllUsers(){
+     setLockState(true); //ver amanha terminar amanha legal falta isso e mais algumas coisas aaaaa
+     api.get("/users",{
+       headers: {
+         Authorization: token
+       }
+     }).then(res => {
+      setUserRes(res.data); 
+      
+     }).catch(err => {
+      console.log(err);
+     })
+     
+   }
+
+   function searchingFor(userName){
+
+    return function(user){
+      return user.name.toLowerCase().includes(userName.toLowerCase()) || !userName;
+    }
+    
+   }
+
+   async function putUserInBoard(user_id){
+
+       setOpenPeople(false);
+       api.post("/boards/" + board_id + "/" + user_id,{},{
+         headers: {
+           Authorization: token
+         }
+       }).
+       catch(res => 
+        console.log(res)
+        ).
+       catch(err =>
+        console.log(err)) 
+
+   }
+
 
   async function putBackground(board_id, background_data, token){
     api.put("/boards/" + board_id + "/background", {
@@ -112,19 +191,38 @@ export default function Header({ board_id, board_background, board_name, board_d
         <Dialog open={openPeople} aria-labelledby="form-dialog-title">
           <DialogContent>
             <DialogContentText><strong id="boardTitle" >PESSOAS DO QUADRO</strong></DialogContentText>
-            {board_users.map(user => <>
-              <DialogContentText>
+            <DialogContentText>
                 <strong>Nº de usuários: </strong>{board_users.length}
               </DialogContentText>
+            {board_users.map(user => <>
               <DialogContentText>
                 <strong>Nome do usuário: </strong> {user.name}</DialogContentText>
               <DialogContentText>
                 <strong>Email do usuário: </strong> {user.email}
               </DialogContentText></>)}
           </DialogContent>
+          <DialogContent>
+
+          <Button onClick={() => setAddpeople(true)}>
+                <strong>Adicionar pessoas ao quadro</strong>
+              <AddCircleIcon color="primary" id="addIcon"></AddCircleIcon>
+          </Button>
+            
+          </DialogContent>
+          {addPeople && <DialogContent>
+              <DialogContentText>
+               <strong> Nome do usuário: </strong> <TextField id="txt_username" onChange={event => setUsername(event.target.value)}/> <IconButton> <SearchIcon/> </IconButton>
+              </DialogContentText>
+            {userRes.filter(searchingFor(userName)).map(user => 
+            <DialogContentText>
+                  <Chip onClick={() => setUsertoBoard(user.id)} avatar={<Avatar src={icons[getIconId(user.avatar)].content} />} label={user.name + " / " + user.email}></Chip></DialogContentText>)}
+            </DialogContent>}
           <DialogActions>
             <Button onClick={() => setOpenPeople(false)} color="primary">
               FECHAR
+          </Button>
+          <Button onClick={() => putUserInBoard(usertoBoard)} color="primary">
+              ADICIONAR USUÁRIO
           </Button>
           </DialogActions>
         </Dialog>
