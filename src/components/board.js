@@ -22,6 +22,7 @@ import backgrounds from "../enums/backgrounds";
 import api from '../services/api.js';
 import './board.css';
 import { Alert } from '@material-ui/lab';
+import Snackbar from '@material-ui/core/Snackbar'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -51,10 +52,19 @@ export default function Boards() {
     const token = getToken();
     const [backgrounds_data, setBackgrounds] = React.useState(backgrounds);
     const id = getId();
+    const [open, setOpen] = React.useState(false);
+    const [openError, setOpenError] = React.useState(false);
+    const [error, setError] = React.useState('');
+    const [successMessage, setSuccessMessage] = React.useState('');
 
     const setLoadingTrue = () => {
         setLoading(true);
     }
+
+    const handleClose = () => {
+        setOpen(false);
+        setOpenError(false);
+    };
 
     const setLoadingFalse = () => {
         setLoading(false);
@@ -103,10 +113,13 @@ export default function Boards() {
                 }
             }).then(res => {
                 if (getBoards()) {
+                    setSuccessMessage(`Quadro ${newBoardName} criado com sucesso!`)
+                    setOpen(true);
                     setLoadingFalse();
                 }
             }).catch(err => {
-
+                setError(err.response.data.errors[0].defaultMessage);
+                setOpenError(true);
             })
         setAddDialog(false);
         getBoards();
@@ -127,8 +140,11 @@ export default function Boards() {
                     Authorization: token
                 }
             }).then(res => {
-
+                setSuccessMessage(`Você saiu do quadro ID: ${id}`)
+                setOpen(true);
             }).catch(err => {
+                setError(err.response.data.errors[0].defaultMessage);
+                setOpenError(true);
             })
         }
         else {
@@ -140,9 +156,12 @@ export default function Boards() {
                 }).then(res => {
                     if (getBoards()) {
                         setLoadingFalse();
+                        setSuccessMessage(`Quadro ${board.name} excluído com sucesso!`)
+                        setOpen(true);
                     }
                 }).catch(err => {
-
+                    setError(err.response.data.errors[0].defaultMessage);
+                    setOpenError(true);
                 })
         }
 
@@ -169,9 +188,13 @@ export default function Boards() {
                     setLoadingFalse();
                     setEditFalse();
                     getBoards();
+                    setSuccessMessage(`Quadro ${editedBoardName} editado com sucesso!`)
+                    setOpen(true);
                 })
                 .catch(err => {
-                    setLoadingFalse()
+                    setLoadingFalse();
+                    setError(err.response.data.errors[0].defaultMessage);
+                    setOpenError(true);
                 });
         }
     }
@@ -381,7 +404,16 @@ export default function Boards() {
                     </div>
                 </div>
             }
-
+            <Snackbar open={open} onClose={handleClose}>
+                <Alert onClose={handleClose} severity="success">
+                    {successMessage}
+                </Alert>
+            </Snackbar>
+            <Snackbar open={openError} autoHideDuration={6000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity="error">
+                    {error}
+                </Alert>
+            </Snackbar>
         </div >
     )
 }
