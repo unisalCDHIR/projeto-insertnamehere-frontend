@@ -26,7 +26,7 @@ import Snackbar from '@material-ui/core/Snackbar'
 
 const useStyles = makeStyles((theme) => ({
     root: {
-
+        
     },
 }));
 
@@ -266,28 +266,30 @@ export default function Boards() {
                         </DialogContentText>
 
                             <DialogContentText>
-                                Nome: <TextField
+                                <TextField
+                                    label="Nome"
                                     id="txtBoardName"
                                     onChange={event => setNewBoardName(event.target.value)}
                                 ></TextField>
                             </DialogContentText>
                             <DialogContentText>
-                                Descrição: <TextField
+                                <TextField
+                                    fullWidth
+                                    multiline="true"
+                                    rows="4"
+                                    label="Descrição"
                                     id="txtDescription"
                                     onChange={event => setNewBoardDesc(event.target.value)}
                                 ></TextField>
                             </DialogContentText>
 
                             <div id="buttonsAddDialog">
-                                <Button onClick={() => addBoard()}> Adicionar
-                        <AddCircleIcon id="addIcon">
-
-                                    </AddCircleIcon></Button>
-
-                                <Button onClick={() => closeAddDialog()}> Fechar
-                        <Filled id="closeIcon">
-
-                                    </Filled></Button>
+                                <Button variant="contained" onClick={() => closeAddDialog()}> Fechar
+                                    <Filled id="closeIcon"></Filled>
+                                </Button>
+                                <Button variant="contained" color="primary" onClick={() => addBoard()}> Adicionar
+                                    <AddCircleIcon id="addIcon"></AddCircleIcon>
+                                </Button>
                             </div>
                         </DialogContent>
                     </Dialog>
