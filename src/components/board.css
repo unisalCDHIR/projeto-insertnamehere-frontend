@@ -13,6 +13,11 @@
     padding: 20px;
 }
 
+#no-boards-alert {
+    margin: 40px;
+    width: 90%;
+}
+
 .row {
     display: flex;
     width: 100%;
@@ -92,6 +97,10 @@ body {
     margin: 5px;
 }
 
+#buttonsAddDialog>* {
+    margin: 10px;
+}
+
 #addDialogElements{
     margin: 10px;
 }
@@ -114,6 +123,10 @@ body {
     transform: translateY(100%);
     transition: 0.5s;
     opacity: 0;
+}
+
+#txtDescription {
+    width: 100%;
 }
 
 .MuiListItem-gutters {

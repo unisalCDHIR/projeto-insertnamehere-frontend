@@ -124,7 +124,7 @@ export default function VerticalTabs() {
         <Profile />
       </TabPanel>
 
-      <TabPanel value={value} index={1}>
+      <TabPanel id="boardsPanel" value={value} index={1}>
         <Boards />
       </TabPanel>
 

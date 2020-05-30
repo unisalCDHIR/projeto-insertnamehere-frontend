@@ -1,15 +1,14 @@
 #logoutIcon{
     width: 50px;
     height: 50px;
-    position: absolute;
     top: 10px;
     right: 10px;
    
 }
 
-#logoutIcon:hover{
-    width: 53px;
-    height: 53px;
+#headers_icons{
+    position: absolute;
+    right: 0;
 }
 
 #boardTitle{
@@ -21,7 +20,6 @@
     height: 50px;
     top: 10px;
     right: 70px;
-    position: absolute;
 }
 
 #backgroundsIcon{
@@ -29,25 +27,50 @@
     height: 50px;
     top: 10px;
     right: 130px;
-    position: absolute;
-}
-
-#backgroundsIcon:hover{
-    width: 53px;
-    height: 53px;
-}
-
-#peopleIcon:hover{
-    width: 53px;
-    height: 53px;
 }
 
 #imgs{
     width: 200px;
     border-radius: 10px;
     border-color: lightblue;
+}
 
+.background-selected{
+    border: 10px solid blue;
+}
 
+#home-icon {
+    width: 50px;
+    height: 50px;
+    top: 10px;
+    right: 130px;
+}
+
+#home-icon:hover{
+    cursor: pointer;
+    font-size: 2.05em;
+}
+
+#buttonAdd{
+    margin-left: 2px;
+    position: absolute;
+}
+
+#txt_username{
+    margin-top: 7px;
+}
+
+#addUser{
+    display: none;
+}
+#boardTitle{
+    font-size: 20px;
+}
+
+#imgs{
+    width: 200px;
+    border-radius: 10px;
+    border-color: lightblue;
 }
 
 #imgs:hover{

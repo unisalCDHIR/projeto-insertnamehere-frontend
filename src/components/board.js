@@ -21,10 +21,12 @@ import { ListItem_ } from "../components/styles";
 import backgrounds from "../enums/backgrounds";
 import api from '../services/api.js';
 import './board.css';
+import { Alert } from '@material-ui/lab';
+import Snackbar from '@material-ui/core/Snackbar'
 
 const useStyles = makeStyles((theme) => ({
     root: {
-
+        
     },
 }));
 
@@ -50,10 +52,19 @@ export default function Boards() {
     const token = getToken();
     const [backgrounds_data, setBackgrounds] = React.useState(backgrounds);
     const id = getId();
+    const [open, setOpen] = React.useState(false);
+    const [openError, setOpenError] = React.useState(false);
+    const [error, setError] = React.useState('');
+    const [successMessage, setSuccessMessage] = React.useState('');
 
     const setLoadingTrue = () => {
         setLoading(true);
     }
+
+    const handleClose = () => {
+        setOpen(false);
+        setOpenError(false);
+    };
 
     const setLoadingFalse = () => {
         setLoading(false);
@@ -102,10 +113,13 @@ export default function Boards() {
                 }
             }).then(res => {
                 if (getBoards()) {
+                    setSuccessMessage(`Quadro ${newBoardName} criado com sucesso!`)
+                    setOpen(true);
                     setLoadingFalse();
                 }
             }).catch(err => {
-
+                setError(err.response.data.errors[0].defaultMessage);
+                setOpenError(true);
             })
         setAddDialog(false);
         getBoards();
@@ -126,8 +140,11 @@ export default function Boards() {
                     Authorization: token
                 }
             }).then(res => {
-
+                setSuccessMessage(`Você saiu do quadro ID: ${id}`)
+                setOpen(true);
             }).catch(err => {
+                setError(err.response.data.errors[0].defaultMessage);
+                setOpenError(true);
             })
         }
         else {
@@ -139,9 +156,12 @@ export default function Boards() {
                 }).then(res => {
                     if (getBoards()) {
                         setLoadingFalse();
+                        setSuccessMessage(`Quadro ${board.name} excluído com sucesso!`)
+                        setOpen(true);
                     }
                 }).catch(err => {
-
+                    setError(err.response.data.errors[0].defaultMessage);
+                    setOpenError(true);
                 })
         }
 
@@ -168,9 +188,13 @@ export default function Boards() {
                     setLoadingFalse();
                     setEditFalse();
                     getBoards();
+                    setSuccessMessage(`Quadro ${editedBoardName} editado com sucesso!`)
+                    setOpen(true);
                 })
                 .catch(err => {
-                    setLoadingFalse()
+                    setLoadingFalse();
+                    setError(err.response.data.errors[0].defaultMessage);
+                    setOpenError(true);
                 });
         }
     }
@@ -242,146 +266,156 @@ export default function Boards() {
                         </DialogContentText>
 
                             <DialogContentText>
-                                Nome: <TextField
+                                <TextField
+                                    label="Nome"
                                     id="txtBoardName"
                                     onChange={event => setNewBoardName(event.target.value)}
                                 ></TextField>
                             </DialogContentText>
                             <DialogContentText>
-                                Descrição: <TextField
+                                <TextField
+                                    fullWidth
+                                    multiline="true"
+                                    rows="4"
+                                    label="Descrição"
                                     id="txtDescription"
                                     onChange={event => setNewBoardDesc(event.target.value)}
                                 ></TextField>
                             </DialogContentText>
 
                             <div id="buttonsAddDialog">
-                                <Button onClick={() => addBoard()}> Adicionar
-                        <AddCircleIcon id="addIcon">
-
-                                    </AddCircleIcon></Button>
-
-                                <Button onClick={() => closeAddDialog()}> Fechar
-                        <Filled id="closeIcon">
-
-                                    </Filled></Button>
-
+                                <Button variant="contained" onClick={() => closeAddDialog()}> Fechar
+                                    <Filled id="closeIcon"></Filled>
+                                </Button>
+                                <Button variant="contained" color="primary" onClick={() => addBoard()}> Adicionar
+                                    <AddCircleIcon id="addIcon"></AddCircleIcon>
+                                </Button>
                             </div>
-
                         </DialogContent>
                     </Dialog>
                     <div className="listContainer">
-                        <List component="nav" aria-label="main mailbox folders" className="list">
-                            {boards ? boards.content.map((board) =>
-                                <ListItem className="item">
-                                    <ListItem_ background={backgrounds_data[getBackgroundId(board.background)].content}>
-                                        <ListItemLink href={"/boards/" + board.id}>
-                                            <ListItemText primary="" className="title" />
-                                            <div className="boardDescription" >
+                        {boards.totalElements > 0 ?
+                            <List component="nav" aria-label="main mailbox folders" className="list">
+                                {boards.content.map((board) =>
+                                    <ListItem className="item">
+                                        <ListItem_ background={backgrounds_data[getBackgroundId(board.background)].content}>
+                                            <ListItemLink href={"/boards/" + board.id}>
+                                                <ListItemText primary="" className="title" />
+                                                <div className="boardDescription" >
 
-                                                <strong>Nome: </strong> {board.name}
-                                                <br />
-                                                <strong>Descrição: </strong>{board.description}
-                                                <br />
-                                                <strong>Criador do Quadro: </strong>{board.owner.name}
-                                            </div>
-                                        </ListItemLink>
+                                                    <strong>Nome: </strong> {board.name}
+                                                    <br />
+                                                    <strong>Descrição: </strong>{board.description}
+                                                    <br />
+                                                    <strong>Criador do Quadro: </strong>{board.owner.name}
+                                                </div>
+                                            </ListItemLink>
 
-                                        <div className="actions">
-                                            {
-                                                Number(id) === board.owner.id ? <IconButton
+                                            <div className="actions">
+                                                {
+                                                    Number(id) === board.owner.id ? <IconButton
+                                                        variant="contained"
+                                                        color="primary"
+                                                        aria-label="edit"
+                                                        className="editButton"
+                                                        onClick={() => setEditTrue(board)}>
+                                                        <EditIcon />
+                                                    </IconButton> : null
+                                                }
+
+                                                <IconButton
                                                     variant="contained"
-                                                    color="primary"
-                                                    aria-label="edit"
-                                                    className="editButton"
-                                                    onClick={() => setEditTrue(board)}>
-                                                    <EditIcon />
-                                                </IconButton> : null
-                                            }
+                                                    color="secondary"
+                                                    aria-label="delete"
+                                                    className="deleteButton"
+                                                    onClick={() => handleDeleteMessage(board)}
+                                                >
+                                                    <DeleteIcon />
+                                                </IconButton>
 
-                                            <IconButton
-                                                variant="contained"
-                                                color="secondary"
-                                                aria-label="delete"
-                                                className="deleteButton"
-                                                onClick={() => handleDeleteMessage(board)}
-                                            >
-                                                <DeleteIcon />
-                                            </IconButton>
-
-                                        </div>
-                                    </ListItem_>
-                                    <Dialog open={openEdit} aria-labelledby="form-dialog-title">
-                                        <DialogContent>
-                                            <DialogContentText id="editBoardDialog">
-                                                EDITAR SEU QUADRO
+                                            </div>
+                                        </ListItem_>
+                                        <Dialog open={openEdit} aria-labelledby="form-dialog-title">
+                                            <DialogContent>
+                                                <DialogContentText id="editBoardDialog">
+                                                    EDITAR SEU QUADRO
                                         </DialogContentText>
-                                            <TextField
-                                                autoFocus
-                                                margin="dense"
-                                                id={board.name}
-                                                label="Nome"
-                                                type="text"
-                                                fullWidth
-                                                onChange={event => setEditedBoardName(event.target.value)}
-                                                value={editedBoardName}
-                                            />
-                                            <TextField
-                                                autoFocus
-                                                margin="dense"
-                                                multiline
-                                                rows={6}
-                                                id={board.description}
-                                                label="Descrição"
-                                                type="text"
-                                                fullWidth
-                                                onChange={event => setEditedBoardDescription(event.target.value)}
-                                                value={editedBoardDescription}
-                                            />
-                                        </DialogContent>
-                                        <DialogActions>
-                                            <Button onClick={setEditFalse} color="primary">
-                                                Cancelar
+                                                <TextField
+                                                    autoFocus
+                                                    margin="dense"
+                                                    id={board.name}
+                                                    label="Nome"
+                                                    type="text"
+                                                    fullWidth
+                                                    onChange={event => setEditedBoardName(event.target.value)}
+                                                    value={editedBoardName}
+                                                />
+                                                <TextField
+                                                    autoFocus
+                                                    margin="dense"
+                                                    multiline
+                                                    rows={6}
+                                                    id={board.description}
+                                                    label="Descrição"
+                                                    type="text"
+                                                    fullWidth
+                                                    onChange={event => setEditedBoardDescription(event.target.value)}
+                                                    value={editedBoardDescription}
+                                                />
+                                            </DialogContent>
+                                            <DialogActions>
+                                                <Button onClick={setEditFalse} color="primary">
+                                                    Cancelar
                                         </Button>
-                                            <Button onClick={() => handleEditCloseAndSend(board)} color="primary">
-                                                Salvar
+                                                <Button onClick={() => handleEditCloseAndSend(board)} color="primary">
+                                                    Salvar
                                         </Button>
-                                        </DialogActions>
-                                    </Dialog>
-                                    <Dialog open={deleteWarning && isOwner}>
-                                        <DialogContent >
-                                            <DialogContentText>
-                                                Você é o dono deste quadro, se decidir sair do mesmo, todos os dados serão apagados.
-                                                Tem certeza?
+                                            </DialogActions>
+                                        </Dialog>
+                                        <Dialog open={deleteWarning && isOwner}>
+                                            <DialogContent >
+                                                <DialogContentText>
+                                                    Você é o dono deste quadro, se decidir sair do mesmo, todos os dados serão apagados.
+                                                    Tem certeza?
                                             </DialogContentText>
-                                            <Button onClick={() => handleDelete(board)}>
-                                                SIM
+                                                <Button onClick={() => handleDelete(board)}>
+                                                    SIM
                                             </Button>
-                                            <Button onClick={() => setDeleteWarning(false)}>
-                                                NÃO
+                                                <Button onClick={() => setDeleteWarning(false)}>
+                                                    NÃO
                                             </Button>
-                                        </DialogContent>
-                                    </Dialog>
-                                    <Dialog open={deleteWarning && !isOwner}>
-                                        <DialogContent >
-                                            <DialogContentText>
-                                                Deseja mesmo sair deste quadro?
+                                            </DialogContent>
+                                        </Dialog>
+                                        <Dialog open={deleteWarning && !isOwner}>
+                                            <DialogContent >
+                                                <DialogContentText>
+                                                    Deseja mesmo sair deste quadro?
                                             </DialogContentText>
-                                            <Button onClick={() => handleDelete(board)}>
-                                                SIM
+                                                <Button onClick={() => handleDelete(board)}>
+                                                    SIM
                                             </Button>
-                                            <Button onClick={() => setDeleteWarning(false)}>
-                                                NÃO
+                                                <Button onClick={() => setDeleteWarning(false)}>
+                                                    NÃO
                                             </Button>
-                                        </DialogContent>
-                                    </Dialog>
+                                            </DialogContent>
+                                        </Dialog>
 
-                                </ListItem>
-                            ) : null}
-                        </List>
+                                    </ListItem>)}
+                            </List> : <Alert id="no-boards-alert" variant="filled" severity="info">Você não participa de quadros. Crie um clicando em "Adicionar".</Alert>
+                        }
                     </div>
                 </div>
             }
-
+            <Snackbar open={open} onClose={handleClose}>
+                <Alert onClose={handleClose} severity="success">
+                    {successMessage}
+                </Alert>
+            </Snackbar>
+            <Snackbar open={openError} autoHideDuration={6000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity="error">
+                    {error}
+                </Alert>
+            </Snackbar>
         </div >
     )
 }

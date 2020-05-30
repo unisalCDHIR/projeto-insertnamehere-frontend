@@ -35,7 +35,7 @@ export default function Profile() {
     const [openAvatarsDialog, setAvatarsDialog] = React.useState(false);
     const [openEditUserInfo, setEditUserInfo] = React.useState(false);
     const [edittedUsername, setUsername] = React.useState('');
-    const [edittedEmail, setedittedEmail] = React.useState('');
+    const [currentEmail, setCurrentEmail] = React.useState('');
 
     async function getUser() {
         setBreakEl(true);
@@ -46,6 +46,7 @@ export default function Profile() {
         }).then(res => {
             setUser(res.data);
             setUserAvatar(res.data.avatar);
+            setCurrentEmail(res.data.email);
         })
             .catch(err => {
                 err.response.data ? setError(err.response.data.errors[0].defaultMessage) : setError('ERRO DESCONHECIDO');
@@ -59,7 +60,6 @@ export default function Profile() {
         let board_b = "";
         if (user_avatar.length === 3) {
             board_b = user_avatar[1] + user_avatar[2];
-            console.log(board_b);
         }
         else {
             board_b = user_avatar[1];
@@ -84,9 +84,6 @@ export default function Profile() {
         setOpenError(false);
     };
 
-    console.log(user.name);
-    console.log(user.email);
-
     async function putIcon(id, email, name, avatar){
         
         api.put("/users/" + id, {
@@ -107,7 +104,6 @@ export default function Profile() {
             );
 
     }
-    console.log(edittedEmail);
     
     async function saveEdittedUserInfo(){
 
@@ -115,6 +111,7 @@ export default function Profile() {
 
         api.put("/users/" + id, {
             avatar: userAvatar,
+            email: currentEmail,
             name: edittedUsername,
           }
           , {
@@ -186,7 +183,11 @@ export default function Profile() {
                         </DialogContentText>
 
                         <DialogContentText>
-                            Nome da conta: <TextField onChange={event => setUsername(event.target.value)}></TextField>
+                            <TextField label="Nome da conta" 
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                            defaultValue={edittedUsername} onChange={event => setUsername(event.target.value)}></TextField>
                         </DialogContentText>
 
                     </DialogContent>

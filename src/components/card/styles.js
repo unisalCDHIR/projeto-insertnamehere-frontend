@@ -37,6 +37,14 @@ export const Container = styled.div`
     .icon_:hover~.userNameIcon{
         display: block;
     }
+
+    #addUser{
+        display: none;
+    }
+
+    #buttonCardInfo{
+        position:fixed;
+    }
     
 
     ${props => props.id === "temp" && css`
