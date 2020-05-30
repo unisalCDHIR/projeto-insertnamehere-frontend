@@ -182,9 +182,8 @@ export default function Header({ board_id, board_background, board_name, board_d
        then(res => {
         setopenUserAddedtoBoard(true)
         getAllUsers();
+        window.location.reload();
        }
-        
-        
         ).
        catch(err => {setOpenError(true); setError(err.response.data.errors[0].defaultMessage)})
 

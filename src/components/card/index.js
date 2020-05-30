@@ -155,10 +155,6 @@ export default function Card({ cards, index, listIndex, board_id }) {
     return elem.parentNode.removeChild(elem);
   }
 
-  if (usertoCard) {
-    document.getElementById("addUser").style.display = "block"
-  }
-
   async function putUserInCard(user_id, card_users,  card_id, card_column, description, name) {
     var users = [];
 
