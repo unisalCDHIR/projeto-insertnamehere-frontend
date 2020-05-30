@@ -1,51 +1,29 @@
-import React, { useContext } from 'react';
-
-import { Container } from './styles';
-
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-
-import "../header/styles.css"
-
+import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
+import Chip from '@material-ui/core/Chip';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
-
-import IconButton from '@material-ui/core/IconButton';
-
-import TextField from '@material-ui/core/TextField';
-
-import BoardBackgroundContext from "../board/context.js"
-
-import FilterHdrIcon from '@material-ui/icons/FilterHdr';
-
-import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
-
-import backgrounds from '../../enums/backgrounds'
-
 import Grid from '@material-ui/core/Grid';
-
-import api from '../../services/api.js'
-
-import { getToken } from '../../authentication/auth';
-
+import IconButton from '@material-ui/core/IconButton';
+import Snackbar from '@material-ui/core/Snackbar';
+import TextField from '@material-ui/core/TextField';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
-
-import SearchIcon from '@material-ui/icons/Search';
-
-import Chip from '@material-ui/core/Chip';
-
-import icons_data from '../../enums/icons.js'
-
-import Avatar from '@material-ui/core/Avatar';
-
-import Snackbar from '@material-ui/core/Snackbar'
-
-import { Alert } from '@material-ui/lab';
-
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
-
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import FilterHdrIcon from '@material-ui/icons/FilterHdr';
+import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
+import HomeIcon from '@material-ui/icons/Home';
+import SearchIcon from '@material-ui/icons/Search';
+import { Alert } from '@material-ui/lab';
+import React from 'react';
+import { getToken } from '../../authentication/auth';
+import backgrounds from '../../enums/backgrounds';
+import icons_data from '../../enums/icons.js';
+import api from '../../services/api.js';
+import "../header/styles.css";
+import { Container } from './styles';
 
 export default function Header({ board_id, board_background, board_name, board_description, board_users, board_owner, board_owner_email }) {  //TERMINAR DIALOG BACKGROUNDS
 
@@ -70,13 +48,13 @@ export default function Header({ board_id, board_background, board_name, board_d
     setOpenLogout(false);
   }
 
-  function handleClose(){
+  function handleClose() {
     setopenUserAddedtoBoard(false);
     setopenUserDeletedtoBoard(false);
     setOpenError(false);
   }
 
-  function redirectToHome(){
+  function redirectToHome() {
     window.location = "/home";
   }
 
@@ -89,10 +67,10 @@ export default function Header({ board_id, board_background, board_name, board_d
     window.location = '/login';
   }
 
-  function removeItemFromArray(arr, value) { 
+  function removeItemFromArray(arr, value) {
     var index = arr.indexOf(value);
     if (index > -1) {
-        arr.splice(index, 1);
+      arr.splice(index, 1);
     }
     return arr;
   }
@@ -104,207 +82,209 @@ export default function Header({ board_id, board_background, board_name, board_d
 
 
 
-  async function deleteUserfromBoard(userToDelete){
+  async function deleteUserfromBoard(userToDelete) {
 
     api.delete("/boards/" + board_id + "/" + userToDelete,
-     {
-      headers: {
-        Authorization: token
-      }
-    }).then(res => {getAllUsers(); removeElement("user" + userToDelete); setopenUserDeletedtoBoard(true)}).catch(err => {setOpenError(true); setError(err.response.data.errors[0].defaultMessage)})
+      {
+        headers: {
+          Authorization: token
+        }
+      }).then(res => { getAllUsers(); removeElement("user" + userToDelete); setopenUserDeletedtoBoard(true) }).catch(err => { setOpenError(true); setError(err.response.data.errors[0].defaultMessage) })
   }
 
-  function getBackgroundId(board_background){
+  function getBackgroundId(board_background) {
     let board_b = "";
-    if(board_background.length === 3){
+    if (board_background.length === 3) {
       board_b = board_background[1] + board_background[2];
       console.log(board_b);
     }
-    else{
+    else {
       board_b = board_background[1];
     }
     return board_b;
-   }
+  }
 
-   function getIconId(icon){
+  function getIconId(icon) {
     let board_b = "";
-    if(icon.length === 3){
+    if (icon.length === 3) {
       board_b = icon[1] + icon[2];
       console.log(board_b);
     }
-    else{
+    else {
       board_b = icon[1];
     }
     return board_b;
-   }
+  }
 
-   if(!lockState){
-     getAllUsers();
-   }
+  if (!lockState) {
+    getAllUsers();
+  }
 
-   console.log(userRes);
+  console.log(userRes);
 
-   async function getAllUsers(){
-     setLockState(true); //ver amanha terminar amanha legal falta isso e mais algumas coisas aaaaa
-     api.get("/users",{
-       headers: {
-         Authorization: token
-       }
-     }).then(res => {
-      setUserRes(res.data); 
-      
-     }).catch(err => {setOpenError(true); setError(err.response.data.errors[0].defaultMessage)})
-     
-   }
+  async function getAllUsers() {
+    setLockState(true); //ver amanha terminar amanha legal falta isso e mais algumas coisas aaaaa
+    api.get("/users", {
+      headers: {
+        Authorization: token
+      }
+    }).then(res => {
+      setUserRes(res.data);
 
-   function closePeople(){
-     setOpenPeople(false);
-     setAddpeople(false);
-     setUsertoBoard("");
-   }
+    }).catch(err => { setOpenError(true); setError(err.response.data.errors[0].defaultMessage) })
 
-   function searchingFor(userName){
+  }
 
-    return function(user){
+  function closePeople() {
+    setOpenPeople(false);
+    setAddpeople(false);
+    setUsertoBoard("");
+  }
+
+  function searchingFor(userName) {
+
+    return function (user) {
       return user.name.toLowerCase().includes(userName.toLowerCase()) && user.email.toLowerCase().includes(userName.toLowerCase()) || !userName;
     }
-    
-   }
 
-   async function putUserInBoard(user_id){
+  }
 
-       setOpenPeople(false);
-       api.post("/boards/" + board_id + "/" + user_id,{},{
-         headers: {
-           Authorization: token
-         }
-       }).
-       then(res => {
+  async function putUserInBoard(user_id) {
+
+    setOpenPeople(false);
+    api.post("/boards/" + board_id + "/" + user_id, {}, {
+      headers: {
+        Authorization: token
+      }
+    }).
+      then(res => {
         setopenUserAddedtoBoard(true)
         getAllUsers();
         window.location.reload();
-       }
-        ).
-       catch(err => {setOpenError(true); setError(err.response.data.errors[0].defaultMessage)})
+      }
+      ).
+      catch(err => { setOpenError(true); setError(err.response.data.errors[0].defaultMessage) })
 
-   }
+  }
 
 
-  async function putBackground(board_id, background_data, token){
+  async function putBackground(board_id, background_data, token) {
     api.put("/boards/" + board_id + "/background", {
       background: background_data
     }
-    , {
-      headers:{
-        Authorization: token
-    }}).then(res => {
-      document.getElementById("board").style.backgroundImage = "url(" + backgroundArr[getBackgroundId(background_data)].content + ")";
-      document.getElementsByClassName("background-selected")[0].setAttribute("class", backgroundId);
-      document.getElementsByClassName(background_data)[0].setAttribute("class", "background-selected");
-    } 
-      
-      ).catch(err => {setOpenError(true); setError(err.response.data.errors[0].defaultMessage)})
+      , {
+        headers: {
+          Authorization: token
+        }
+      }).then(res => {
+        document.getElementById("board").style.backgroundImage = "url(" + backgroundArr[getBackgroundId(background_data)].content + ")";
+        document.getElementsByClassName("background-selected")[0].setAttribute("class", backgroundId);
+        document.getElementsByClassName(background_data)[0].setAttribute("class", "background-selected");
+      }
+
+      ).catch(err => { setOpenError(true); setError(err.response.data.errors[0].defaultMessage) })
   }
 
 
   return (
-      <Container>
-        <h1 onClick={() => redirectToHome()}> CDHI - Quadros Organizacionais</h1>
+    <Container>
+      <IconButton><HomeIcon id="home-icon" onClick={() => redirectToHome()} /></IconButton>
+      <h2>{board_name}</h2>
 
-        <div id="headers_icons">
+      <div id="headers_icons">
 
-            <IconButton><FilterHdrIcon id="backgroundsIcon" onClick={() => setOpenBackgrounds(true)} /></IconButton>
+        <IconButton><FilterHdrIcon id="backgroundsIcon" onClick={() => setOpenBackgrounds(true)} /></IconButton>
 
-            <IconButton><PeopleAltIcon onClick={() => setOpenPeople(true)} id="peopleIcon" /></IconButton>
+        <IconButton><PeopleAltIcon onClick={() => setOpenPeople(true)} id="peopleIcon" /></IconButton>
 
-            <IconButton><ExitToAppIcon onClick={() => setOpenLogout(true)} id="logoutIcon" /></IconButton>
+        <IconButton><ExitToAppIcon onClick={() => setOpenLogout(true)} id="logoutIcon" /></IconButton>
 
-        </div>
+      </div>
 
-        <Dialog open={openLogout} aria-labelledby="form-dialog-title">
-          <DialogContent>
-            <DialogContentText>
-              Deseja mesmo fazer logout?
+      <Dialog open={openLogout} aria-labelledby="form-dialog-title">
+        <DialogContent>
+          <DialogContentText>
+            Deseja mesmo fazer logout?
                 </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleCloseLogout} color="primary">
-              Não
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseLogout} color="primary">
+            Não
           </Button>
-            <Button onClick={handleCloseAndLogout} color="primary">
-              Sim
+          <Button onClick={handleCloseAndLogout} color="primary">
+            Sim
           </Button>
-          </DialogActions>
-        </Dialog>
+        </DialogActions>
+      </Dialog>
 
-        <Dialog open={openPeople} aria-labelledby="form-dialog-title">
-          <DialogContent>
-            <DialogContentText><strong id="boardTitle" >PESSOAS DO QUADRO</strong></DialogContentText>
-            <DialogContentText>
-                <strong>Nº de usuários: </strong>{board_users.length}
-              </DialogContentText>
-            {board_users.map(user => <>
-              <DialogContentText id={"user" + user.id}>
-                  <Chip onClick={() => putUserInBoard(user.id)} avatar={<Avatar src={icons[getIconId(user.avatar)].content} />} label={user.name + " / " + user.email}></Chip>
-                  <IconButton onClick=
-                  {() => deleteUserfromBoard(user.id)}>
-                    <DeleteForeverIcon color="secondary"></DeleteForeverIcon></IconButton>
-              </DialogContentText></>)}
-          </DialogContent>
-          <DialogContent>
+      <Dialog open={openPeople} aria-labelledby="form-dialog-title">
+        <DialogContent>
+          <DialogContentText><strong id="boardTitle" >PESSOAS DO QUADRO</strong></DialogContentText>
+          <DialogContentText>
+            <strong>Nº de usuários: </strong>{board_users.length}
+          </DialogContentText>
+          {board_users.map(user => <>
+            <DialogContentText id={"user" + user.id}>
+              <Chip onClick={() => putUserInBoard(user.id)} avatar={<Avatar src={icons[getIconId(user.avatar)].content} />} label={user.name + " / " + user.email}></Chip>
+              <IconButton onClick=
+                {() => deleteUserfromBoard(user.id)}>
+                <DeleteForeverIcon color="secondary"></DeleteForeverIcon></IconButton>
+            </DialogContentText></>)}
+        </DialogContent>
+        <DialogContent>
 
           <Button onClick={() => setAddpeople(true)}>
-                <strong>Adicionar pessoas ao quadro</strong>
-              <AddCircleIcon color="primary" id="addIcon"></AddCircleIcon>
+            <strong>Adicionar pessoas ao quadro</strong>
+            <AddCircleIcon color="primary" id="addIcon"></AddCircleIcon>
           </Button>
-            
-          </DialogContent>
-          {addPeople && <DialogContent>
-              <DialogContentText>
-               <strong> Nome do usuário: </strong> <TextField id="txt_username" onChange={event => setUsername(event.target.value)}/> <IconButton> <SearchIcon/> </IconButton>
-              </DialogContentText>
-            {userRes.filter(searchingFor(userName)).map(user => 
+
+        </DialogContent>
+        {addPeople && <DialogContent>
+          <DialogContentText>
+            <strong> Nome do usuário: </strong> <TextField id="txt_username" onChange={event => setUsername(event.target.value)} /> <IconButton> <SearchIcon /> </IconButton>
+          </DialogContentText>
+          {userRes.filter(searchingFor(userName)).map(user =>
             <DialogContentText>
-                  <Chip onClick={() => putUserInBoard(user.id)} avatar={<Avatar src={icons[getIconId(user.avatar)].content} />} label={user.name + " / " + user.email}></Chip></DialogContentText>)}
-            </DialogContent>}
-          <DialogActions>
-            <Button onClick={() => closePeople()} color="primary">
-              FECHAR
+              <Chip onClick={() => putUserInBoard(user.id)} avatar={<Avatar src={icons[getIconId(user.avatar)].content} />} label={user.name + " / " + user.email}></Chip></DialogContentText>)}
+        </DialogContent>}
+        <DialogActions>
+          <Button onClick={() => closePeople()} color="primary">
+            FECHAR
           </Button>
-          </DialogActions>
-        </Dialog>
+        </DialogActions>
+      </Dialog>
 
-        <Dialog open={openBackgrounds} aria-labelledby="form-dialog-title">
-          <DialogContent>
-            <DialogContentText>
-              <strong>PLANOS DE FUNDO</strong>
-            </DialogContentText>
+      <Dialog open={openBackgrounds} aria-labelledby="form-dialog-title">
+        <DialogContent>
+          <DialogContentText>
+            <strong>PLANOS DE FUNDO</strong>
+          </DialogContentText>
 
-            <Grid align="center" container spacing={3}>
-              {backgroundArr.map(background => <>
-                <Grid item sm={6} id="imgDiv">
-                  <img onClick={() => putBackground(board_id, background.id, token)} id="imgs" className={background.id === backgroundId ? "background-selected" : background.id} src={background.content}></img>
-                </Grid>
-              </>)}
-            </Grid>
+          <Grid align="center" container spacing={3}>
+            {backgroundArr.map(background => <>
+              <Grid item sm={6} id="imgDiv">
+                <img onClick={() => putBackground(board_id, background.id, token)} id="imgs" className={background.id === backgroundId ? "background-selected" : background.id} src={background.content}></img>
+              </Grid>
+            </>)}
+          </Grid>
 
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setOpenBackgrounds(false)} color="primary">
-              FECHAR
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenBackgrounds(false)} color="primary">
+            FECHAR
           </Button>
-          </DialogActions>
-        </Dialog>
+        </DialogActions>
+      </Dialog>
 
-        <Snackbar open={openUserAddedtoBoard} onClose={handleClose}>
+      <Snackbar open={openUserAddedtoBoard} onClose={handleClose}>
         <Alert onClose={handleClose} severity="success">
-            Usuário adicionado na board!
+          Usuário adicionado na board!
         </Alert>
       </Snackbar>
 
       <Snackbar open={openUserDeletedtoBoard} onClose={handleClose}>
         <Alert onClose={handleClose} severity="error">
-            Usuário deletado da board!
+          Usuário deletado da board!
         </Alert>
       </Snackbar>
 
@@ -314,8 +294,8 @@ export default function Header({ board_id, board_background, board_name, board_d
         </Alert>
       </Snackbar>
 
-      </Container>
+    </Container>
 
-     
+
   );
 }
