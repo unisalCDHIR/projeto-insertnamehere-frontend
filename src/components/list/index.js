@@ -34,6 +34,10 @@ import { getToken } from '../../authentication/auth';
 
 import { makeStyles } from '@material-ui/core/styles';
 
+import Snackbar from '@material-ui/core/Snackbar'
+
+import { Alert } from '@material-ui/lab';
+
 import "../list/styles.css"
 
 const useStyles = makeStyles((theme) => ({
@@ -62,6 +66,8 @@ export default function List( { data, index: listIndex, board_id } ){
   const [loading, setLoading] = React.useState(false);
 
   const [errorMsg, setErrormsg] = React.useState('');
+
+  const [openCardCreated, setopenCardCreated] = React.useState(false);
   
 
   let token = getToken();
@@ -86,11 +92,16 @@ export default function List( { data, index: listIndex, board_id } ){
     window.location.reload();
     console.log(data);
     setLoading(false);
+    setopenCardCreated(true);
     
     }).catch(err => {
       setLoading(false);
       setErrormsg(err);
     });
+  }
+
+  function handleClose(){
+    setopenCardCreated(false);
   }
 
     return (
@@ -151,6 +162,12 @@ export default function List( { data, index: listIndex, board_id } ){
           </DialogActions>
         </Dialog>
       </Container>
+
+      <Snackbar open={openCardCreated} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="success">
+            Card criado com sucesso.
+        </Alert>
+      </Snackbar>
 
       </>
     );

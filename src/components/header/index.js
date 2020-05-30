@@ -12,9 +12,9 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 
-import TextField from '@material-ui/core/TextField';
+import IconButton from '@material-ui/core/IconButton';
 
-import IconButton from '@material-ui/core/IconButton'
+import TextField from '@material-ui/core/TextField';
 
 import BoardBackgroundContext from "../board/context.js"
 
@@ -40,6 +40,10 @@ import icons_data from '../../enums/icons.js'
 
 import Avatar from '@material-ui/core/Avatar';
 
+import Snackbar from '@material-ui/core/Snackbar'
+
+import { Alert } from '@material-ui/lab';
+
 
 export default function Header({ board_id, board_background, board_name, board_description, board_users, board_owner, board_owner_email }) {  //TERMINAR DIALOG BACKGROUNDS
 
@@ -55,9 +59,15 @@ export default function Header({ board_id, board_background, board_name, board_d
   const [lockState, setLockState] = React.useState(false);
   const [icons, setIcons] = React.useState(icons_data);
   const [usertoBoard, setUsertoBoard] = React.useState("");
+  const [openUserAddedtoBoard, setopenUserAddedtoBoard] = React.useState(false);
+  
 
   function handleCloseLogout() {
     setOpenLogout(false);
+  }
+
+  function handleClose(){
+    setopenUserAddedtoBoard(false);
   }
 
   function redirectToHome(){
@@ -118,10 +128,16 @@ export default function Header({ board_id, board_background, board_name, board_d
      
    }
 
+   function closePeople(){
+     setOpenPeople(false);
+     setAddpeople(false);
+     setUsertoBoard("");
+   }
+
    function searchingFor(userName){
 
     return function(user){
-      return user.name.toLowerCase().includes(userName.toLowerCase()) || !userName;
+      return user.name.toLowerCase().includes(userName.toLowerCase()) && user.email.toLowerCase().includes(userName.toLowerCase()) || !userName;
     }
     
    }
@@ -134,8 +150,12 @@ export default function Header({ board_id, board_background, board_name, board_d
            Authorization: token
          }
        }).
-       catch(res => 
-        console.log(res)
+       catch(res => {
+        setopenUserAddedtoBoard(true)
+        getAllUsers();
+       }
+        
+        
         ).
        catch(err =>
         console.log(err)) 
@@ -166,11 +186,15 @@ export default function Header({ board_id, board_background, board_name, board_d
       <Container>
         <h1 onClick={() => redirectToHome()}> CDHI - Quadros Organizacionais</h1>
 
-        <FilterHdrIcon onClick={() => setOpenBackgrounds(true)} id="backgroundsIcon" />
+        <div id="headers_icons">
 
-        <PeopleAltIcon onClick={() => setOpenPeople(true)} id="peopleIcon" />
+            <IconButton><FilterHdrIcon id="backgroundsIcon" onClick={() => setOpenBackgrounds(true)} /></IconButton>
 
-        <ExitToAppIcon onClick={() => setOpenLogout(true)} id="logoutIcon" />
+            <IconButton><PeopleAltIcon onClick={() => setOpenPeople(true)} id="peopleIcon" /></IconButton>
+
+            <IconButton><ExitToAppIcon onClick={() => setOpenLogout(true)} id="logoutIcon" /></IconButton>
+
+        </div>
 
         <Dialog open={openLogout} aria-labelledby="form-dialog-title">
           <DialogContent>
@@ -215,14 +239,11 @@ export default function Header({ board_id, board_background, board_name, board_d
               </DialogContentText>
             {userRes.filter(searchingFor(userName)).map(user => 
             <DialogContentText>
-                  <Chip onClick={() => setUsertoBoard(user.id)} avatar={<Avatar src={icons[getIconId(user.avatar)].content} />} label={user.name + " / " + user.email}></Chip></DialogContentText>)}
+                  <Chip onClick={() => putUserInBoard(user.id)} avatar={<Avatar src={icons[getIconId(user.avatar)].content} />} label={user.name + " / " + user.email}></Chip></DialogContentText>)}
             </DialogContent>}
           <DialogActions>
-            <Button onClick={() => setOpenPeople(false)} color="primary">
+            <Button onClick={() => closePeople()} color="primary">
               FECHAR
-          </Button>
-          <Button onClick={() => putUserInBoard(usertoBoard)} color="primary">
-              ADICIONAR USUÁRIO
           </Button>
           </DialogActions>
         </Dialog>
@@ -249,7 +270,14 @@ export default function Header({ board_id, board_background, board_name, board_d
           </DialogActions>
         </Dialog>
 
+        <Snackbar open={openUserAddedtoBoard} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="success">
+            Usuário adicionado na board!
+        </Alert>
+      </Snackbar>
 
       </Container>
+
+     
   );
 }
