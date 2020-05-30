@@ -88,6 +88,10 @@ export default function Card({ cards, index, listIndex, board_id }) {
 
   const [openUserDeletedFromCard, setopenUserDeletedFromCard] = React.useState(false);
 
+  const [openError, setOpenError] = React.useState(false);
+
+  const [error, setError] = React.useState('');
+
   function searchingFor(userName) {
 
     return function (user) {
@@ -110,6 +114,7 @@ export default function Card({ cards, index, listIndex, board_id }) {
     setopenCardEditted(false);
     setopenUserAddedtoCard(false);
     setopenUserDeletedFromCard(false);
+    setOpenError(false);
   }
 
   async function getAllUsers() {
@@ -148,10 +153,6 @@ export default function Card({ cards, index, listIndex, board_id }) {
   function removeElement(id) {
     var elem = document.getElementById(id);
     return elem.parentNode.removeChild(elem);
-  }
-
-  if (usertoCard) {
-    document.getElementById("addUser").style.display = "block"
   }
 
   async function putUserInCard(user_id, card_users,  card_id, card_column, description, name) {
@@ -217,7 +218,7 @@ export default function Card({ cards, index, listIndex, board_id }) {
       headers: {
         Authorization: token
       }
-    }).then(res => {window.location.reload(); setopenUserDeletedFromCard(true)}).catch(err => console.log(err))
+    }).then(res => {window.location.reload(); setopenUserDeletedFromCard(true)}).catch(err => {setOpenError(true); setError(err.response.data.errors[0].defaultMessage)})
   }
 
 
@@ -245,7 +246,7 @@ export default function Card({ cards, index, listIndex, board_id }) {
       headers: {
         Authorization: token
       }
-    }).then(res => setopenCardEditted(true)).catch(err => console.log(err))
+    }).then(res => setopenCardEditted(true)).catch(err => {setOpenError(true); setError(err.response.data.errors[0].defaultMessage)})
   }
 
   function deleteCard(card_id) { //delete no /cards
@@ -259,7 +260,7 @@ export default function Card({ cards, index, listIndex, board_id }) {
       setopenCardDeleted(true)
     }
      
-    ).catch(err => console.log(err))
+    ).catch(err => {setOpenError(true); setError(err.response.data.errors[0].defaultMessage)})
   }
 
   const [, dropRef] = useDrop({
@@ -411,6 +412,12 @@ export default function Card({ cards, index, listIndex, board_id }) {
       <Snackbar open={openUserDeletedFromCard} onClose={handleClose}>
         <Alert onClose={handleClose} severity="error">
            Usuário deletado do card!
+        </Alert>
+      </Snackbar>
+
+      <Snackbar open={openError} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="error">
+          {error}
         </Alert>
       </Snackbar>
 

@@ -44,6 +44,8 @@ import Snackbar from '@material-ui/core/Snackbar'
 
 import { Alert } from '@material-ui/lab';
 
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+
 
 export default function Header({ board_id, board_background, board_name, board_description, board_users, board_owner, board_owner_email }) {  //TERMINAR DIALOG BACKGROUNDS
 
@@ -60,7 +62,9 @@ export default function Header({ board_id, board_background, board_name, board_d
   const [icons, setIcons] = React.useState(icons_data);
   const [usertoBoard, setUsertoBoard] = React.useState("");
   const [openUserAddedtoBoard, setopenUserAddedtoBoard] = React.useState(false);
-  
+  const [openUserDeletedtoBoard, setopenUserDeletedtoBoard] = React.useState(false);
+  const [openError, setOpenError] = React.useState(false);
+  const [error, setError] = React.useState('');
 
   function handleCloseLogout() {
     setOpenLogout(false);
@@ -68,6 +72,8 @@ export default function Header({ board_id, board_background, board_name, board_d
 
   function handleClose(){
     setopenUserAddedtoBoard(false);
+    setopenUserDeletedtoBoard(false);
+    setOpenError(false);
   }
 
   function redirectToHome(){
@@ -81,6 +87,31 @@ export default function Header({ board_id, board_background, board_name, board_d
     localStorage.removeItem("ID_KEY");
     setOpenLogout(false);
     window.location = '/login';
+  }
+
+  function removeItemFromArray(arr, value) { 
+    var index = arr.indexOf(value);
+    if (index > -1) {
+        arr.splice(index, 1);
+    }
+    return arr;
+  }
+
+  function removeElement(id) {
+    var elem = document.getElementById(id);
+    return elem.parentNode.removeChild(elem);
+  }
+
+
+
+  async function deleteUserfromBoard(userToDelete){
+
+    api.delete("/boards/" + board_id + "/" + userToDelete,
+     {
+      headers: {
+        Authorization: token
+      }
+    }).then(res => {getAllUsers(); removeElement("user" + userToDelete); setopenUserDeletedtoBoard(true)}).catch(err => {setOpenError(true); setError(err.response.data.errors[0].defaultMessage)})
   }
 
   function getBackgroundId(board_background){
@@ -122,9 +153,7 @@ export default function Header({ board_id, board_background, board_name, board_d
      }).then(res => {
       setUserRes(res.data); 
       
-     }).catch(err => {
-      console.log(err);
-     })
+     }).catch(err => {setOpenError(true); setError(err.response.data.errors[0].defaultMessage)})
      
    }
 
@@ -150,15 +179,13 @@ export default function Header({ board_id, board_background, board_name, board_d
            Authorization: token
          }
        }).
-       catch(res => {
+       then(res => {
         setopenUserAddedtoBoard(true)
         getAllUsers();
+        window.location.reload();
        }
-        
-        
         ).
-       catch(err =>
-        console.log(err)) 
+       catch(err => {setOpenError(true); setError(err.response.data.errors[0].defaultMessage)})
 
    }
 
@@ -176,9 +203,7 @@ export default function Header({ board_id, board_background, board_name, board_d
       document.getElementsByClassName(background_data)[0].setAttribute("class", "background-selected");
     } 
       
-      ).catch(err => 
-        console.log(err)
-        );
+      ).catch(err => {setOpenError(true); setError(err.response.data.errors[0].defaultMessage)})
   }
 
 
@@ -219,10 +244,11 @@ export default function Header({ board_id, board_background, board_name, board_d
                 <strong>Nº de usuários: </strong>{board_users.length}
               </DialogContentText>
             {board_users.map(user => <>
-              <DialogContentText>
-                <strong>Nome do usuário: </strong> {user.name}</DialogContentText>
-              <DialogContentText>
-                <strong>Email do usuário: </strong> {user.email}
+              <DialogContentText id={"user" + user.id}>
+                  <Chip onClick={() => putUserInBoard(user.id)} avatar={<Avatar src={icons[getIconId(user.avatar)].content} />} label={user.name + " / " + user.email}></Chip>
+                  <IconButton onClick=
+                  {() => deleteUserfromBoard(user.id)}>
+                    <DeleteForeverIcon color="secondary"></DeleteForeverIcon></IconButton>
               </DialogContentText></>)}
           </DialogContent>
           <DialogContent>
@@ -273,6 +299,18 @@ export default function Header({ board_id, board_background, board_name, board_d
         <Snackbar open={openUserAddedtoBoard} onClose={handleClose}>
         <Alert onClose={handleClose} severity="success">
             Usuário adicionado na board!
+        </Alert>
+      </Snackbar>
+
+      <Snackbar open={openUserDeletedtoBoard} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="error">
+            Usuário deletado da board!
+        </Alert>
+      </Snackbar>
+
+      <Snackbar open={openError} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="error">
+          {error}
         </Alert>
       </Snackbar>
 
