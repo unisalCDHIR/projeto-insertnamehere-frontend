@@ -13,6 +13,11 @@
     padding: 20px;
 }
 
+#no-boards-alert {
+    margin: 40px;
+    width: 90%;
+}
+
 .row {
     display: flex;
     width: 100%;
