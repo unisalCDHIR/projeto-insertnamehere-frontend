@@ -56,6 +56,7 @@ export default function Boards() {
     const [openError, setOpenError] = React.useState(false);
     const [error, setError] = React.useState('');
     const [successMessage, setSuccessMessage] = React.useState('');
+    const [boardName, setBoardName] = React.useState("");
 
     const setLoadingTrue = () => {
         setLoading(true);
@@ -156,7 +157,7 @@ export default function Boards() {
                 }).then(res => {
                     if (getBoards()) {
                         setLoadingFalse();
-                        setSuccessMessage(`Quadro ${board.name} excluído com sucesso!`)
+                        setSuccessMessage(`Quadro ${board} excluído com sucesso!`)
                         setOpen(true);
                     }
                 }).catch(err => {
@@ -371,14 +372,16 @@ export default function Boards() {
                                                     Salvar
                                         </Button>
                                             </DialogActions>
+                                            
                                         </Dialog>
+
                                         <Dialog open={deleteWarning && isOwner}>
                                             <DialogContent >
                                                 <DialogContentText>
                                                     Você é o dono deste quadro, se decidir sair do mesmo, todos os dados serão apagados.
                                                     Tem certeza?
                                             </DialogContentText>
-                                                <Button onClick={() => handleDelete(board)}>
+                                                <Button onClick={() => handleDelete(board.name)}>
                                                     SIM
                                             </Button>
                                                 <Button onClick={() => setDeleteWarning(false)}>
@@ -391,7 +394,7 @@ export default function Boards() {
                                                 <DialogContentText>
                                                     Deseja mesmo sair deste quadro?
                                             </DialogContentText>
-                                                <Button onClick={() => handleDelete(board)}>
+                                                <Button onClick={() => handleDelete(getBoardId(), board)}>
                                                     SIM
                                             </Button>
                                                 <Button onClick={() => setDeleteWarning(false)}>
@@ -399,6 +402,7 @@ export default function Boards() {
                                             </Button>
                                             </DialogContent>
                                         </Dialog>
+                                      
 
                                     </ListItem>)}
                             </List> : <Alert id="no-boards-alert" variant="filled" severity="info">Você não participa de quadros. Crie um clicando em "Adicionar".</Alert>

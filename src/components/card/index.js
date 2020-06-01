@@ -323,7 +323,7 @@ export default function Card({ cards, index, listIndex, board_id }) {
 
       </Container>
 
-      <Dialog open={openCardModal} aria-labelledby="form-dialog-title">
+      <Dialog open={openCardModal && cards.id !== "temp"} aria-labelledby="form-dialog-title">
         <DialogContent>
           <DialogContentText>
             <strong>INFORMAÇÃO DO CARD</strong>
@@ -336,15 +336,24 @@ export default function Card({ cards, index, listIndex, board_id }) {
             <strong>Descrição: </strong>
             {cards.content}
           </DialogContentText>
+          <DialogContentText>
+            <strong>Número de pessoas: </strong>
+            {cards.users.length}
+          </DialogContentText>
         </DialogContent>
 
         <DialogContent>
+        {cards.users.length > 0 && cards.users.map(user => 
+           <DialogContentText>
+                <Chip avatar={user.avatar && <Avatar src={icons[getIconId(user.avatar)].content} />} label={user.name + " / " + user.email}></Chip>
+            <IconButton onClick={() => deleteUserfromCard(cards.users, user.id,  cards.column, cards.content, cards.name, cards.id )}><DeleteForeverIcon color="secondary"></DeleteForeverIcon></IconButton></DialogContentText>)}
+        </DialogContent>
 
+        <DialogContent>
           <Button onClick={() => setAddpeople(true)}>
             <strong>Adicionar pessoas ao card</strong>
             <AddCircleIcon color="primary" id="addIcon"></AddCircleIcon>
           </Button>
-
         </DialogContent>
 
         {addPeople && <DialogContent>
@@ -354,7 +363,7 @@ export default function Card({ cards, index, listIndex, board_id }) {
           {userRes.length > 0 && userRes.filter(searchingFor(userName)).map(user =>
             <DialogContentText>
               <Chip onClick={() => putUserInCard(user.id, cards.users, cards.id, cards.column, cards.content, cards.name)} avatar={<Avatar src={icons[getIconId(user.avatar)].content} />} label={user.name + " / " + user.email}></Chip>
-               <IconButton onClick={() => deleteUserfromCard(cards.users, user.id,  cards.column, cards.content, cards.name, cards.id )}><DeleteForeverIcon color="secondary"></DeleteForeverIcon></IconButton></DialogContentText>)}
+                   </DialogContentText>)}
         </DialogContent>}
 
 

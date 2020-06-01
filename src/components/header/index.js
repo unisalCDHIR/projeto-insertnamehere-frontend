@@ -244,8 +244,14 @@ export default function Header({ board_id, board_background, board_name, board_d
             <strong> Nome do usuário: </strong> <TextField id="txt_username" onChange={event => setUsername(event.target.value)} /> <IconButton> <SearchIcon /> </IconButton>
           </DialogContentText>
           {userRes.filter(searchingFor(userName)).map(user =>
-            <DialogContentText>
-              <Chip onClick={() => putUserInBoard(user.id)} avatar={<Avatar src={icons[getIconId(user.avatar)].content} />} label={user.name + " / " + user.email}></Chip></DialogContentText>)}
+              {
+                 return <DialogContentText>
+                      <Chip onClick={() => putUserInBoard(user.id)} avatar={<Avatar src={icons[getIconId(user.avatar)].content} />} label={user.name + " / " + user.email}>
+                    </Chip>
+                  </DialogContentText>
+              }
+              
+            )}
         </DialogContent>}
         <DialogActions>
           <Button onClick={() => closePeople()} color="primary">
